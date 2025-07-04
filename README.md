@@ -56,7 +56,7 @@ No automatic dependency check is included — this is intentional. You are expec
 ##  Usage
 
 1. Clone the repository
-2. Run `python3 cms_security_monitor.py create-config` to generate a default config
+2. Run `python3 PoisonIvory.py create-config` to generate a default config (soon!)
 3. Edit the configuration file to match your target
 4. Run scans or start continuous monitoring:
 
