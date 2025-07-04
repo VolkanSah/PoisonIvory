@@ -1,7 +1,7 @@
 
 ![ Security](ivory.jpg)
 
-# PoisonIvory - Nemesis Version 2025
+# PoisonIvory - Nemesis Version 2025 (D)
 ### CMS Security & Tor Monitoring Framework
 
 **Advanced offensive security & monitoring tool by Volkan Sah**
