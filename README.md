@@ -1,5 +1,5 @@
 
-![ChatGPT Security](ivory.png)
+![ Security](ivory.jpg)
 
 # PoisonIvory - Nemesis Version
 ### CMS Security & Tor Monitoring Framework
