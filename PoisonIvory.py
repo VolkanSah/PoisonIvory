@@ -3,8 +3,9 @@
 #   \____ \ /  _ \|  |/  ___/  _ \ /    \  |  \  \/ /  _ \_  __ <   |  |   #
 #   |  |_> >  <_> )  |\___ (  <_> )   |  \ |  |\   (  <_> )  | \/\___  |   #
 #   |   __/ \____/|__/____  >____/|___|  / |__| \_/ \____/|__|   / ____|   #
-#   |__| Nemesis Version \/           \/   © 2008-2025 Volkan Sah   \/     # 
-#   https://github.com/VolkanSah/PoisonIvory/
+#   |__|  PoisonIvory - Nemesis Edition          © 2008-2025 Volkan Sah   # 
+#   https://github.com/VolkanSah/PoisonIvory/   Born for those who read code #
+
 #!/usr/bin/env python3
 """
 PoisonIvory 1.0
