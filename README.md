@@ -13,7 +13,7 @@
 
 ---
 
-## 📂 What is PoisonIvory?
+##  What is PoisonIvory?
 
 PoisonIvory is a powerful, modular security tool that combines:
 
@@ -31,7 +31,7 @@ It can be used for:
 
 ---
 
-## 🛠 Features
+## Features
 
 * CMS domain & onion address monitoring
 * Modular port, web, SSL/TLS & vulnerability scanning
@@ -43,7 +43,7 @@ It can be used for:
 
 ---
 
-## ⚒ Requirements
+## Requirements
 
 PoisonIvory depends on several external tools:
 
@@ -57,7 +57,7 @@ No automatic dependency check is included — this is intentional. You are expec
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 1. Clone the repository
 2. Run `python3 cms_security_monitor.py create-config` to generate a default config
@@ -73,7 +73,7 @@ For detailed options and functionality, read the code — this tool is made for 
 
 ---
 
-## ⚠️ Legal & Ethical Notice
+## Legal & Ethical Notice
 
 * This tool must only be used in authorized environments (your own systems or with explicit permission)
 * Unauthorized scanning or interception of traffic is **illegal** in most jurisdictions
@@ -82,7 +82,7 @@ For detailed options and functionality, read the code — this tool is made for 
 
 ---
 
-## ❗ Design Philosophy
+##  Design Philosophy
 
 PoisonIvory intentionally exposes the user to errors if tools are missing or misconfigured.
 This serves two purposes:
@@ -94,7 +94,7 @@ This serves two purposes:
 
 ---
 
-## 🧠 Why No GUI? No Installer? No Pretty Stats?
+## Why No GUI? No Installer? No Pretty Stats?
 
 Because real-world security doesn’t work through clicky dashboards.
 If you need colors and icons, you’re in the wrong place.
@@ -102,7 +102,7 @@ This tool is for terminal warriors who prefer raw output, log files, and clean r
 
 ---
 
-## 👾 Disclaimer
+##  Disclaimer
 
 This software is provided **as-is**, without warranty or guarantees of any kind.
 The author cannot be held responsible for any damage, legal trouble, or misuse.
@@ -114,6 +114,9 @@ The author cannot be held responsible for any damage, legal trouble, or misuse.
 
 If you appreciate this work:
 
-* Give a ⭐ on [VolkanSah's Github](https://github.com/volkansah)
+* Give a ⭐ on [On this Repo (PoisonIvory)](https://github.com/VolkanSah/PoisonIvory)
 * Consider sponsoring development
 * Or just… stay ethical and sharp
+
+## Copyright
+[Volkan Kücükbudak](https://github.com/volkansah)
