@@ -25,9 +25,9 @@ PoisonIvory is a powerful, modular security tool that combines:
 * Automated emergency scans on threshold events
 
 It can be used for:
-✔ Offensive security research (authorized environments only)
-✔ Hardening your own infrastructure
-✔ Educational purposes for security experts
+-  Offensive security research (authorized environments only)
+-  Hardening your own infrastructure
+-  Educational purposes for security experts
 
 ---
 
