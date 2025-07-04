@@ -72,35 +72,28 @@ class CMSSecurityMonitor:
         
         # Security Patterns
         self.malicious_patterns = [
-            r'(?i)(abuse|child|illegal|hack|exploit|malware|ddos)',
-            r'(?i)(admin|login|wp-admin|phpmyadmin|admin\.php)',
+            r'(?i)(abuse|child|illegal|hack|exploit|malware|ddos)', # Keywords
+            r'(?i)(admin|login|wp-admin|phpmyadmin|admin\.php)', # Admins
             r'(?i)(\.\.\/|\.\.\\|%2e%2e|%252e%252e)',  # Directory traversal
             r'(?i)(select|union|drop|insert|update|delete|script)',  # SQL injection
             r'(?i)(<script|javascript:|vbscript:|onload=|onerror=)',  # XSS
             r'(?i)(eval\(|base64_decode|exec\(|system\()',  # Code execution
             r'(?i)(password|passwd|secret|key|token)',  # Credential harvesting
-            # Command Injection (OS-Kommandos)
+                # Command Injection (OS-Kommandos)
             r'(?i)(\b(wget|curl|netcat|nc|bash|sh|cmd|powershell|python|perl)\b|\|\||\&\&|\$\(|\`)',
-    
-            # Path Traversal (erweitert)
+                # Path Traversal (erweitert)
             r'(?i)(\.\.%2f|\.\.%5c|%2e%2e%2f|%252e%252e%252f|\~\/|\.\.\\x2f)',  # URL-kodierte Varianten
-    
-            # Sensible Dateien/Zugriffe
+                # Sensible Dateien/Zugriffe
             r'(?i)(/etc/passwd|/proc/self|\.env|\.git/config|wp-config\.php|\.htaccess)',
-    
-            # SSRF (Server-Side Request Forgery)
+                # SSRF (Server-Side Request Forgery)
             r'(?i)(https?://(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))|metadata\.google\.internal)',
-    
-            # Open Redirect
+                # Open Redirect
             r'(?i)(redirect=|url=|next=|to=|dest=)(https?%3a%2f%2f|https?://)',  %3a%2f%2f = :// URL-kodiert
-    
-            # HTTP Header Injection
+                # HTTP Header Injection
             r'(?i)(\r\n|\n|\r|\%0d|\%0a)(Set-Cookie|Location|Content-Length|:)',
-    
-            # File Upload-Bypass
+                # File Upload-Bypass
             r'(?i)\.(php|exe|dll|js|jar|jsp)(\.|$|\?|\s)',  # Gefährliche Dateierweiterungen
-    
-            # LFI/RFI (Local/Remote File Include)
+                # LFI/RFI (Local/Remote File Include)
             r'(?i)(php://|file://|zip://|expect://|data:text|http://)',
         ]
         
