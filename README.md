@@ -1,7 +1,8 @@
 
 ![ChatGPT Security](ivory.png)
 
-# PoisonIvory 1.0 — CMS Security & Tor Monitoring Framework
+# PoisonIvory - Nemesis Version
+### CMS Security & Tor Monitoring Framework
 
 **Advanced offensive security & monitoring tool by Volkan Sah**
 > [!WARNING]
