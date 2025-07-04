@@ -1,6 +1,5 @@
 # These are an  example of basic functions you can implement. 
-# I won't provide a complete script to prevent misuse by script kiddies.
-# But so you can see how it works!
+
 
 #!/usr/bin/env python3
 import subprocess
