@@ -11,8 +11,6 @@
 
 
 
----
-
 ##  What is PoisonIvory?
 
 PoisonIvory is a powerful, modular security tool that combines:
@@ -29,7 +27,6 @@ It can be used for:
 -  Hardening your own infrastructure
 -  Educational purposes for security experts
 
----
 
 ## Features
 
@@ -41,7 +38,6 @@ It can be used for:
 * Tor circuit management and relay blacklist support
 * Continuous monitoring mode with automated reporting
 
----
 
 ## Requirements
 
@@ -55,7 +51,6 @@ PoisonIvory depends on several external tools:
 **Important:**
 No automatic dependency check is included — this is intentional. You are expected to understand your environment, install necessary tools, and deal with errors appropriately.
 
----
 
 ##  Usage
 
@@ -71,7 +66,6 @@ No automatic dependency check is included — this is intentional. You are expec
 
 For detailed options and functionality, read the code — this tool is made for people who *actually read* code.
 
----
 
 ## Legal & Ethical Notice
 
@@ -80,7 +74,6 @@ For detailed options and functionality, read the code — this tool is made for 
 * The author takes no responsibility for misuse, damage, or legal consequences
 * You are responsible for understanding local laws and ethical guidelines
 
----
 
 ##  Design Philosophy
 
@@ -92,7 +85,6 @@ This serves two purposes:
 
 **If you don’t know how to handle a stack trace, you should not run this tool.**
 
----
 
 ## Why No GUI? No Installer? No Pretty Stats?
 
@@ -100,7 +92,6 @@ Because real-world security doesn’t work through clicky dashboards.
 If you need colors and icons, you’re in the wrong place.
 This tool is for terminal warriors who prefer raw output, log files, and clean reports.
 
----
 
 ##  Disclaimer
 
@@ -108,7 +99,6 @@ This software is provided **as-is**, without warranty or guarantees of any kind.
 The author cannot be held responsible for any damage, legal trouble, or misuse.
 **Use responsibly. Think before you scan. Learn before you execute.**
 
----
 
 ## ❤️ Support & Respect
 
