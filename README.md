@@ -7,8 +7,9 @@
 > [!WARNING]
 > Professional Use Only — Read Carefully!
 > This tool is designed for **experienced security professionals** and researchers. It provides a modular framework for comprehensive security monitoring, CMS analysis, and Tor traffic observation.
+> **PoisonIvory is not a beginner script!** It intentionally lacks automated dependency checks or full error handling to prevent misuse by unskilled users. Errors, missing components, or crashes are part of the intended learning curve.
 
-**PoisonIvory is not a beginner script!** It intentionally lacks automated dependency checks or full error handling to prevent misuse by unskilled users. Errors, missing components, or crashes are part of the intended learning curve.
+
 
 ---
 
