@@ -1,5 +1,7 @@
+
 # PoisonIvory - Nemesis Nuclear Fusion 
 ###### > Version 1.3 - Codename: "Nemesis Reborn"  
+![ Security](ivory.jpg)
 
 ### Advanced Security & Threat Monitoring Framework  
 
