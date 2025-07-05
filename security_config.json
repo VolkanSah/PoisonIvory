@@ -1,0 +1,18 @@
+{
+  "domain": "yourdomain.com",
+  "onion_address": "youronionaddress.onion",
+  "tor_control_port": 9051,
+  "tor_password": "your_tor_password",
+  "output_dir": "security_reports",
+  "alert_threshold": 5,
+  "malicious_relays": ["ABCD1234EFGH5678", "IJKL91011MNOP1213"],
+  "malicious_patterns": ["(?i)(malware|exploit|ransomware)", "(?i)(wp-admin|phpmyadmin)"],
+  "scan_tools": {
+    "nmap": "/usr/bin/nmap",
+    "nikto": "/usr/bin/nikto",
+    "sslscan": "/usr/bin/sslscan"
+  },
+  "monitoring_interval": 300,
+  "enable_traffic_monitoring": true,
+  "nuclear_mode": false
+}
