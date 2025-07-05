@@ -1,8 +1,13 @@
 
 ![ Security](ivory.jpg)
 
-# PoisonIvory - Nemesis Version 2025 (D)
+# PoisonIvory - Nemesis Version 2025 (DEV)
 ### CMS Security & Tor Monitoring Framework
+## Log/bugs
+1. **Syntax Error** in Regex Pattern
+2. **Memory Leaks**  unclosed Sessions
+3. **Race Conditions** in Threading
+4. **Resource Leaks** by Tor Controller
 
 **Advanced offensive security & monitoring tool by Volkan Sah**
 > [!WARNING]
