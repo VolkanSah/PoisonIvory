@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-PoisonIvory 2.0 - Nemesis (Nuclear) Edition
-Red Team Security Tool für maximale Belastungstests
+PoisonIvory 1.2 - Nemesis (Nuclear) Edition
+Red Team Security Tool mit professioneller Konfigurationsverwaltung
 """
 
 import subprocess
@@ -17,12 +17,14 @@ import random
 import resource
 import socket
 import re
+import select
+import struct
 from datetime import datetime
 import concurrent.futures
 import logging
 from collections import defaultdict
 
-# Scapy optional für Monitoring
+# Scapy optional für erweitertes Monitoring
 try:
     from scapy.all import *
     SCAPY_AVAILABLE = True
@@ -33,7 +35,6 @@ except ImportError:
 try:
     from stem import Signal
     from stem.control import Controller
-    from stem.util import term
     TOR_AVAILABLE = True
 except ImportError:
     TOR_AVAILABLE = False
@@ -50,33 +51,18 @@ logging.basicConfig(
 logger = logging.getLogger('RedTeamOps')
 logger.propagate = False
 
-# Nuclear Mode Warnung
-NUCLEAR_WARNING = term.format(
-    "\n☢️  NUCLEAR MODE ACTIVATED - EXPECT SYSTEM INSTABILITY ☢️\n"
-    "Target servers may experience service disruption\n",
-    term.Color.RED, 
-    term.Attr.BOLD
-)
-
-class RedTeamOperator:
-    def __init__(self, config):
-        self.config = config
-        self.domain = config.get('domain')
-        self.onion_address = config.get('onion_address')
-        self.tor_control_port = config.get('tor_control_port', 9051)
-        self.tor_password = config.get('tor_password', '')
-        self.output_dir = config.get('output_dir', 'redteam_reports')
-        self.nuclear_mode = config.get('nuclear_mode', False)
-        self.thread_multiplier = 8 if self.nuclear_mode else 4
-        
-        # Monitoring State
-        self.monitoring_active = False
-        self.scan_results = {}
-        self.suspicious_activity = defaultdict(int)
-        self.alert_threshold = config.get('alert_threshold', 5)
-        
-        # Security Patterns (FIXED REGEX)
-        self.malicious_patterns = [
+class ConfigManager:
+    """Lädt und verwaltet Konfigurationen aus JSON-Dateien"""
+    
+    DEFAULT_CONFIG = {
+        "domain": "",
+        "onion_address": "",
+        "tor_control_port": 9051,
+        "tor_password": "",
+        "output_dir": "redteam_reports",
+        "alert_threshold": 5,
+        "malicious_relays": [],
+        "malicious_patterns": [
             r'(?i)(abuse|child|illegal|hack|exploit|malware|ddos)',
             r'(?i)(admin|login|wp-admin|phpmyadmin|admin\.php)',
             r'(?i)(\.\.\/|\.\.\\|%2e%2e|%252e%252e)',
@@ -84,7 +70,7 @@ class RedTeamOperator:
             r'(?i)(<script|javascript:|vbscript:|onload=|onerror=)',
             r'(?i)(eval\(|base64_decode|exec\(|system\()',
             r'(?i)(password|passwd|secret|key|token)',
-            r'(?i)(\b(wget|curl|netcat|nc|bash|sh|cmd|powershell|python|perl)\b|\|\||\&\&|\$\(|\\`)',  # FIXED
+            r'(?i)(\b(wget|curl|netcat|nc|bash|sh|cmd|powershell|python|perl)\b|\|\||\&\&|\$\(|\\`)',
             r'(?i)(\.\.%2f|\.\.%5c|%2e%2e%2f|%252e%252e%252f|\~\/|\.\.\\x2f)',
             r'(?i)(/etc/passwd|/proc/self|\.env|\.git/config|wp-config\.php|\.htaccess)',
             r'(?i)(https?://(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))|metadata\.google\.internal)',
@@ -92,17 +78,72 @@ class RedTeamOperator:
             r'(?i)(\r\n|\n|\r|\%0d|\%0a)(Set-Cookie|Location|Content-Length|:)',
             r'(?i)\.(php|exe|dll|js|jar|jsp)(\.|$|\?|\s)',
             r'(?i)(php://|file://|zip://|expect://|data:text|http://)',
-        ]
+        ],
+        "scan_tools": {
+            "nmap": "/usr/bin/nmap",
+            "nikto": "/usr/bin/nikto",
+            "sslscan": "/usr/bin/sslscan"
+        },
+        "monitoring_interval": 300,
+        "emergency_scan_threshold": 5
+    }
+    
+    @staticmethod
+    def load_config(config_path):
+        """Lädt Konfiguration aus JSON-Datei mit Fallback auf Defaults"""
+        try:
+            with open(config_path, 'r') as f:
+                user_config = json.load(f)
+            
+            # Merge mit Default-Konfiguration
+            config = ConfigManager.DEFAULT_CONFIG.copy()
+            config.update(user_config)
+            return config
+            
+        except FileNotFoundError:
+            logger.error(f"Config file not found: {config_path}")
+            raise
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON in config: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Error loading config: {e}")
+            raise
+
+class RedTeamOperator:
+    def __init__(self, config):
+        self.config = config
+        self.domain = config.get('domain')
+        self.onion_address = config.get('onion_address')
+        self.tor_control_port = config.get('tor_control_port')
+        self.tor_password = config.get('tor_password')
+        self.output_dir = config.get('output_dir')
+        self.nuclear_mode = config.get('nuclear_mode', False)
+        self.thread_multiplier = 8 if self.nuclear_mode else 4
+        self.monitoring_interval = config.get('monitoring_interval', 300)
+        
+        # Monitoring State
+        self.monitoring_active = False
+        self.scan_results = {}
+        self.suspicious_activity = defaultdict(int)
+        self.alert_threshold = config.get('alert_threshold', 5)
+        self.lock = threading.Lock()
+        
+        # Security Patterns
+        self.malicious_patterns = config.get('malicious_patterns', [])
         
         # Malicious Tor relays
         self.malicious_relays = config.get('malicious_relays', [])
+        
+        # Tool Paths
+        self.tool_paths = config.get('scan_tools', {})
         
         # Create output dir securely
         os.makedirs(self.output_dir, exist_ok=True)
         
         # Nuclear mode initialization
         if self.nuclear_mode:
-            logger.warning(NUCLEAR_WARNING)
+            logger.warning("NUCLEAR MODE ACTIVATED")
             self.enable_nuclear_mode()
             
         # Shutdown handler
@@ -111,41 +152,40 @@ class RedTeamOperator:
 
     def enable_nuclear_mode(self):
         """Aktiviert maximale Belastungseinstellungen"""
-        # Kernel-Parameter optimieren
-        if os.geteuid() == 0:  # Nur als Root
-            os.system("sysctl -w net.core.rmem_max=268435456 >/dev/null 2>&1")
-            os.system("echo '1024 65535' > /proc/sys/net/ipv4/ip_local_port_range 2>/dev/null")
+        if os.geteuid() == 0:
+            try:
+                subprocess.run(['sysctl', '-w', 'net.core.rmem_max=268435456'], 
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                with open('/proc/sys/net/ipv4/ip_local_port_range', 'w') as f:
+                    f.write("1024 65535")
+            except Exception:
+                logger.warning("Nuclear: Kernel tuning failed (run as root for full effect)")
         
-        # Scapy durch raw sockets ersetzen
-        global SCAPY_AVAILABLE
-        SCAPY_AVAILABLE = False
-        
-        # Threading optimieren
-        self.thread_multiplier = min(32, os.cpu_count() * 8)
+        self.thread_multiplier = min(32, (os.cpu_count() or 1) * 8)
+        self.monitoring_interval = 60  # Kürzeres Intervall im Nuclear Mode
 
     def shutdown_handler(self, signum, frame):
-        """Graceful shutdown mit Nuclear-Cleanup"""
-        logger.warning(f"🚨 SHUTDOWN SIGNAL {signum} RECEIVED")
+        """Graceful shutdown mit Cleanup"""
+        logger.warning(f"SHUTDOWN SIGNAL {signum} RECEIVED")
         self.stop_monitoring()
         
         if self.nuclear_mode and os.geteuid() == 0:
-            os.system("sysctl -w net.core.rmem_max=212992 >/dev/null")  # Default-Wert
+            try:
+                subprocess.run(['sysctl', '-w', 'net.core.rmem_max=212992'],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception:
+                pass
         sys.exit(0)
 
     def run_command(self, cmd, timeout=300):
-        """Führt Kommando aus mit Resource-Limits und Sanitization"""
-        # Command Sanitization
-        safe_cmd = [shlex.quote(str(arg)) for arg in cmd]
-        
+        """Führt Kommando aus mit Resource-Limits"""
         try:
-            # Set resource limits
             if self.nuclear_mode:
                 resource.setrlimit(resource.RLIMIT_CPU, (120, 240))
-                resource.setrlimit(resource.RLIMIT_AS, (1 << 30, 2 << 30))  # 1-2GB RAM
+                resource.setrlimit(resource.RLIMIT_AS, (1 << 30, 2 << 30))
             
-            # Execute command
             result = subprocess.run(
-                safe_cmd, 
+                cmd, 
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 timeout=timeout,
@@ -164,259 +204,350 @@ class RedTeamOperator:
         except Exception as e:
             return {'success': False, 'error': str(e)}
         finally:
-            # Reset resource limits
             if self.nuclear_mode:
                 resource.setrlimit(resource.RLIMIT_CPU, (-1, -1))
                 resource.setrlimit(resource.RLIMIT_AS, (-1, -1))
 
-    # ========== AGGRESSIVE SCANNER METHODS ==========
+    # ========== SCANNER METHODEN ==========
     
-    def check_domain_reachable(self, target=None):
-        """Prüft Erreichbarkeit mit Nuclear-Optionen"""
-        target = target or self.domain
-        logger.info(f"[*] Probing {target} with nuclear force...")
-        
-        try:
-            if target.endswith('.onion'):
-                return self.check_onion_reachable(target)
-            else:
-                # DNS mit Aggressivität
-                socket.getaddrinfo(target, 80, flags=socket.AI_ADDRCONFIG)
-                
-                # HTTP/S Check mit Connection Pooling
-                session = self.get_http_session()
-                response = session.get(
-                    f"http://{target}", 
-                    timeout=10,
-                    headers={'User-Agent': 'NuclearScanner/2.0'}
-                )
-                return response.status_code < 500
-                
-        except Exception as e:
-            logger.error(f"Target annihilation failed: {e}")
-            return False
-
-    def get_http_session(self):
-        """Erstellt optimierte HTTP-Session"""
-        session = requests.Session()
-        if self.nuclear_mode:
-            adapter = requests.adapters.HTTPAdapter(
-                pool_connections=100,
-                pool_maxsize=100,
-                max_retries=3
-            )
-            session.mount('http://', adapter)
-            session.mount('https://', adapter)
-        return session
-
     def comprehensive_port_scan(self, target=None):
-        """Port-Scan mit Nuclear-Parametern"""
+        """Führt Port-Scan mit konfigurierten Tools durch"""
         target = target or self.domain
-        logger.warning(f"[!] NUKE PORT SCAN INITIATED: {target}")
+        if not target:
+            logger.error("No target specified for port scan")
+            return {}
+            
+        logger.info(f"Starting port scan: {target}")
         
         port_results = {}
         nmap_flags = "-T5 --min-rate 5000" if self.nuclear_mode else "-T4"
+        nmap_path = self.tool_paths.get('nmap', 'nmap')
         
-        # Aggressive Scan
-        cmd = ["nmap", nmap_flags, "-sS", "-p-", target]
+        # Nmap-Scan
+        cmd = [nmap_path] + nmap_flags.split() + ["-sS", "-p-", target]
         result = self.run_command(cmd, timeout=900 if self.nuclear_mode else 300)
         if result['success']:
-            port_results['nmap_aggressive'] = {
+            port_results['nmap'] = {
                 'output': result['stdout'],
                 'ports': self._parse_nmap_ports(result['stdout'])
             }
         
-        # Service Version Scan
-        cmd = ["nmap", nmap_flags, "-sV", "--version-intensity", "9", target]
-        result = self.run_command(cmd)
-        if result['success']:
-            port_results['service_versions'] = self._parse_nmap_services(result['stdout'])
-        
         return port_results
 
-    # ========== TOR WARFARE METHODS ==========
-    
-    def authenticate_tor_controller(self):
-        """Tor Auth mit Timeout und Nuclear-Resilience"""
-        if not TOR_AVAILABLE:
-            return None
-            
-        try:
-            # Timeout für Verbindung
-            controller = Controller.from_port(port=self.tor_control_port)
-            
-            # Auth mit Passwort wenn vorhanden
-            if self.tor_password:
-                controller.authenticate(password=self.tor_password)
-            else:
-                controller.authenticate()
+    def _parse_nmap_ports(self, output):
+        """Parst Nmap-Ausgabe nach offenen Ports"""
+        ports = []
+        port_pattern = re.compile(r'(\d+)/(tcp|udp)\s+open\s+')
+        
+        for line in output.split('\n'):
+            match = port_pattern.search(line)
+            if match:
+                ports.append(f"{match.group(1)}/{match.group(2)}")
                 
-            return controller
-        except Exception as e:
-            logger.error(f"Tor warfare failed: {e}")
-            return None
+        return ports
 
-    def trigger_emergency_scan(self, suspicious_ip):
-        """Emergency Scan mit Anti-Loop Mechanismus"""
-        logger.critical(f"🚨 EMERGENCY SCAN TRIGGERED: {suspicious_ip}")
-        
-        # Scan in eigenem Thread
-        threading.Thread(
-            target=self.emergency_scan_worker,
-            args=(suspicious_ip,),
-            daemon=True
-        ).start()
-        
-        # Tor Circuit mit 70% Wahrscheinlichkeit erneuern
-        if TOR_AVAILABLE and random.random() < 0.7:
-            self.renew_tor_circuit()
-
-    def renew_tor_circuit(self):
-        """Erzwingt neuen Tor Circuit mit Brutal-Force"""
-        controller = self.authenticate_tor_controller()
-        if controller:
-            try:
-                controller.signal(Signal.NEWNYM)
-                logger.info("Tor circuit nuked and rebuilt")
-                controller.close()
-            except Exception as e:
-                logger.error(f"Circuit annihilation failed: {e}")
-
-    # ========== MAIN WARFARE METHODS ==========
+    # ========== KONFIGURATIONSBASIERTES MONITORING ==========
     
-    def run_full_security_scan(self, target=None):
-        """Führt Total-Zerstörungs-Scan durch"""
-        target = target or self.domain or self.onion_address
-        logger.warning(f"🔥 INITIATING TOTAL SCAN ANNIHILATION: {target}")
-        
-        if not self.check_domain_reachable(target):
-            logger.error(f"Target {target} annihilated preemptively")
-            return None
-        
-        # Nuclear Threading
-        workers = min(32, os.cpu_count() * self.thread_multiplier)
-        
-        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {
-                executor.submit(self.comprehensive_port_scan, target): 'ports',
-                executor.submit(self.nuclear_web_scan, target): 'web',
-                executor.submit(self.comprehensive_ssl_scan, target): 'ssl',
-                executor.submit(self.vulnerability_assessment, target): 'vulns'
-            }
-            
-            for future in concurrent.futures.as_completed(futures):
-                scan_type = futures[future]
-                try:
-                    result = future.result()
-                    logger.info(f"{scan_type.upper()} OBLITERATION COMPLETE")
-                except Exception as e:
-                    logger.error(f"{scan_type} annihilation failed: {e}")
-        
-        return self.generate_warfare_report()
-
     def start_continuous_monitoring(self):
-        """Startet unerbittliches Dauer-Monitoring"""
-        logger.warning("🚀 LAUNCHING PERSISTENT THREAT MONITORING")
+        """Startet kontinuierliches Monitoring basierend auf Konfiguration"""
+        if not self.domain and not self.onion_address:
+            logger.error("No monitoring targets configured")
+            return
+            
+        logger.info("Starting security monitoring")
         self.monitoring_active = True
         
-        # Traffic Monitoring
-        if SCAPY_AVAILABLE and not self.nuclear_mode:
-            traffic_thread = threading.Thread(target=self.monitor_traffic)
-            traffic_thread.daemon = True
-            traffic_thread.start()
-        elif self.nuclear_mode:
-            logger.info("RAW PACKET WARFARE ENGAGED")
-            traffic_thread = threading.Thread(target=self.raw_packet_warfare)
-            traffic_thread.daemon = True
-            traffic_thread.start()
+        # Netzwerk-Monitoring starten
+        if self.config.get('enable_traffic_monitoring', True):
+            monitor_thread = threading.Thread(target=self.network_monitor)
+            monitor_thread.daemon = True
+            monitor_thread.start()
         
-        # Periodische Angriffe
-        self.periodic_warfare()
+        # Periodische Scans
+        self.periodic_monitoring()
 
-    def raw_packet_warfare(self):
-        """Low-Level Packet Warfare für maximale Leistung"""
+    def network_monitor(self):
+        """Startet geeigneten Netzwerk-Monitor"""
         try:
-            # RAW Socket erstellen
+            if self.nuclear_mode and os.geteuid() == 0:
+                logger.info("Using raw socket monitoring")
+                self.raw_packet_sniffer()
+            elif SCAPY_AVAILABLE:
+                logger.info("Using Scapy for packet monitoring")
+                self.scapy_packet_sniffer()
+            else:
+                logger.warning("Packet monitoring disabled")
+        except Exception as e:
+            logger.error(f"Monitoring failed: {e}")
+
+    def raw_packet_sniffer(self):
+        """Low-Level Packet Sniffer"""
+        try:
             sock = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
             sock.setblocking(False)
             
-            logger.warning("🔥 RAW PACKET WARFARE ACTIVE")
             while self.monitoring_active:
-                # Non-blocking packet capture
                 ready, _, _ = select.select([sock], [], [], 1)
                 if ready:
                     packet = sock.recv(65535)
-                    # Minimalistische Analyse
-                    if len(packet) > 50:  | # TCP/UDP Mindestgröße
-                        src_ip = socket.inet_ntoa(packet[26:30])
-                        payload = packet[42:].decode('utf-8', errors='ignore')
-                        self.analyze_payload(src_ip, payload)
+                    self.process_raw_packet(packet)
+        except PermissionError:
+            logger.error("Raw sockets require root privileges")
         except Exception as e:
-            logger.error(f"Packet warfare failed: {e}")
+            logger.error(f"Raw packet sniffer error: {e}")
 
-    def periodic_warfare(self):
-        """Führt periodische Angriffsoperationen durch"""
-        while self.monitoring_active:
-            try:
-                # Gesundheitschecks mit Brutalität
-                targets = [t for t in [self.domain, self.onion_address] if t]
-                for target in targets:
-                    if not self.check_domain_reachable(target):
-                        logger.warning(f"TARGET DOWN: {target} - LAUNCHING COUNTERMEASURES")
-                        self.renew_tor_circuit()
-                
-                # Warten bis zum nächsten Angriff
-                nap_time = 60 if self.nuclear_mode else 300
-                time.sleep(nap_time)
-                
-            except Exception as e:
-                logger.error(f"Warfare error: {e}")
-                time.sleep(10)
+    def process_raw_packet(self, packet):
+        """Verarbeitet Rohpakete auf Sicherheitsbedrohungen"""
+        if len(packet) < 14:
+            return
+            
+        eth_header = packet[:14]
+        eth_type = eth_header[12:14]
+        
+        # IPv4-Pakete
+        if eth_type == b'\x08\x00' and len(packet) >= 34:
+            ip_header = packet[14:34]
+            src_ip = socket.inet_ntoa(ip_header[12:16])
+            protocol = ip_header[9]
+            
+            # TCP-Pakete
+            if protocol == 6 and len(packet) >= 54:
+                tcp_header = packet[34:54]
+                data_offset = (tcp_header[12] >> 4) * 4
+                payload_start = 14 + 20 + data_offset
+                if len(packet) > payload_start:
+                    self.analyze_payload(src_ip, packet[payload_start:])
+            
+            # UDP-Pakete
+            elif protocol == 17 and len(packet) >= 42:
+                self.analyze_payload(src_ip, packet[14+20:])
 
-    def generate_warfare_report(self):
-        """Erstellt Kriegsbericht"""
-        report = {
-            'status': 'TARGET ANNIHILATED',
-            'findings': self.scan_results,
-            'recommendation': 'DEPLOY COUNTERMEASURES IMMEDIATELY',
-            'signature': 'RedTeamOperator PoisonIvory 2.0'
+    def analyze_payload(self, src_ip, payload):
+        """Analysiert Payload auf bösartige Muster"""
+        try:
+            payload_str = payload.decode('utf-8', errors='ignore')
+            for pattern in self.malicious_patterns:
+                if re.search(pattern, payload_str):
+                    with self.lock:
+                        self.handle_suspicious_activity(src_ip, pattern)
+                    break
+        except Exception as e:
+            logger.debug(f"Payload analysis error: {e}")
+
+    def handle_suspicious_activity(self, src_ip, pattern):
+        """Verarbeitet verdächtige Aktivitäten"""
+        self.suspicious_activity[src_ip] += 1
+        logger.warning(f"Suspicious activity from {src_ip}: {pattern}")
+        
+        # Log-Eintrag erstellen
+        log_entry = {
+            'timestamp': datetime.now().isoformat(),
+            'source_ip': src_ip,
+            'pattern': pattern,
+            'count': self.suspicious_activity[src_ip]
         }
         
-        # Report speichern
-        report_file = f"{self.output_dir}/warfare_report_{int(time.time())}.json"
-        with open(report_file, 'w') as f:
-            json.dump(report, f, indent=2)
+        log_path = os.path.join(self.output_dir, 'suspicious_activity.jsonl')
+        with open(log_path, 'a') as f:
+            f.write(json.dumps(log_entry) + '\n')
         
-        logger.warning(f"💀 WARFARE REPORT COMPILED: {report_file}")
-        return report
+        # Emergency-Scan bei Überschreitung des Schwellwerts
+        if self.suspicious_activity[src_ip] >= self.alert_threshold:
+            self.trigger_emergency_scan(src_ip)
+
+    def trigger_emergency_scan(self, src_ip):
+        """Startet Notfall-Scan für verdächtige IP"""
+        logger.critical(f"EMERGENCY SCAN TRIGGERED: {src_ip}")
+        threading.Thread(
+            target=self.run_emergency_scan,
+            args=(src_ip,),
+            daemon=True
+        ).start()
+
+    def run_emergency_scan(self, target_ip):
+        """Führt Notfall-Scan durch"""
+        try:
+            logger.info(f"Emergency scan started for {target_ip}")
+            
+            # Schneller Port-Scan
+            scan_results = self.comprehensive_port_scan(target_ip)
+            
+            # Ergebnisse speichern
+            report = {
+                'timestamp': datetime.now().isoformat(),
+                'target_ip': target_ip,
+                'results': scan_results
+            }
+            
+            report_path = os.path.join(
+                self.output_dir, 
+                f"emergency_scan_{target_ip}_{int(time.time())}.json"
+            )
+            
+            with open(report_path, 'w') as f:
+                json.dump(report, f, indent=2)
+                
+            logger.info(f"Emergency scan saved: {report_path}")
+            
+        except Exception as e:
+            logger.error(f"Emergency scan failed: {e}")
+
+    # ========== KERNOPERATIONEN ==========
+    
+    def run_full_audit(self):
+        """Führt vollständiges Security-Audit durch"""
+        targets = self.get_audit_targets()
+        if not targets:
+            logger.error("No audit targets configured")
+            return
+            
+        logger.info(f"Starting security audit for {len(targets)} targets")
+        
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=min(8, len(targets))  # Max 8 parallele Scans
+        ) as executor:
+            futures = {executor.submit(self.audit_target, target): target for target in targets}
+            
+            for future in concurrent.futures.as_completed(futures):
+                target = futures[future]
+                try:
+                    future.result()
+                    logger.info(f"Audit completed for {target}")
+                except Exception as e:
+                    logger.error(f"Audit failed for {target}: {e}")
+        
+        logger.info("Security audit completed")
+
+    def get_audit_targets(self):
+        """Gibt Liste der zu auditierenden Ziele zurück"""
+        targets = []
+        if self.domain:
+            targets.append(self.domain)
+        if self.onion_address:
+            targets.append(self.onion_address)
+        return targets
+
+    def audit_target(self, target):
+        """Führt vollständiges Audit für ein Ziel durch"""
+        logger.info(f"Starting audit: {target}")
+        
+        # 1. Port-Scan
+        port_scan = self.comprehensive_port_scan(target)
+        
+        # 2. Web-Scan
+        web_scan = self.comprehensive_web_scan(target)
+        
+        # 3. SSL-Scan
+        ssl_scan = self.comprehensive_ssl_scan(target)
+        
+        # Report generieren
+        report = {
+            'target': target,
+            'port_scan': port_scan,
+            'web_scan': web_scan,
+            'ssl_scan': ssl_scan,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        report_path = os.path.join(
+            self.output_dir, 
+            f"audit_report_{target}_{int(time.time())}.json"
+        )
+        
+        with open(report_path, 'w') as f:
+            json.dump(report, f, indent=2)
+            
+        logger.info(f"Audit report saved: {report_path}")
+
+    def periodic_monitoring(self):
+        """Führt periodische Überprüfungen durch"""
+        while self.monitoring_active:
+            try:
+                # Zielverfügbarkeit prüfen
+                for target in self.get_audit_targets():
+                    if not self.check_target_availability(target):
+                        logger.warning(f"Target unavailable: {target}")
+                
+                # Verarbeitete Aktivitäten protokollieren
+                if self.suspicious_activity:
+                    logger.info(f"Suspicious activity counts: {dict(self.suspicious_activity)}")
+                
+                time.sleep(self.monitoring_interval)
+                
+            except Exception as e:
+                logger.error(f"Monitoring error: {e}")
+                time.sleep(10)
+
+    def stop_monitoring(self):
+        """Stoppt alle Überwachungsaktivitäten"""
+        logger.info("Stopping monitoring")
+        self.monitoring_active = False
 
 def main():
-    """Hauptfunktion der Kriegsmaschine"""
-    if '--nuclear' in sys.argv:
-        print(NUCLEAR_WARNING)
-        time.sleep(2)
-        config = {'nuclear_mode': True, 'domain': sys.argv[-1]}
-    else:
-        config = {'domain': sys.argv[-1]}
+    """Hauptfunktion mit erweiterter Konfigurationsverwaltung"""
+    if len(sys.argv) < 2:
+        print("Enterprise Security Auditor")
+        print("Usage:")
+        print("  ./PoisonIvory.py --config <config.json> [--audit|--monitor] [--nuclear]")
+        print("\nExample config:")
+        print(json.dumps(ConfigManager.DEFAULT_CONFIG, indent=2))
+        sys.exit(1)
     
-    operator = RedTeamOperator(config)
+    # Argumente parsen
+    config_path = None
+    command = None
+    nuclear_mode = False
+    
+    i = 1
+    while i < len(sys.argv):
+        if sys.argv[i] == "--config" and i+1 < len(sys.argv):
+            config_path = sys.argv[i+1]
+            i += 2
+        elif sys.argv[i] == "--audit":
+            command = "audit"
+            i += 1
+        elif sys.argv[i] == "--monitor":
+            command = "monitor"
+            i += 1
+        elif sys.argv[i] == "--nuclear":
+            nuclear_mode = True
+            i += 1
+        else:
+            print(f"Unknown argument: {sys.argv[i]}")
+            sys.exit(1)
+    
+    if not config_path:
+        print("Config file required (--config)")
+        sys.exit(1)
     
     try:
-        if '--scan' in sys.argv:
-            operator.run_full_security_scan()
-        elif '--siege' in sys.argv:
+        # Konfiguration laden
+        config = ConfigManager.load_config(config_path)
+        config['nuclear_mode'] = nuclear_mode
+        
+        # Operator initialisieren
+        operator = RedTeamOperator(config)
+        
+        # Kommando ausführen
+        if command == "audit":
+            operator.run_full_audit()
+        elif command == "monitor":
             operator.start_continuous_monitoring()
-            while True: time.sleep(3600)  | # Endlose Belagerung
+            while operator.monitoring_active:
+                time.sleep(1)
         else:
-            print("OPERATION MODES:")
-            print("  --scan   : Einmaliger Vernichtungsschlag")
-            print("  --siege  : Dauerbelagerung (Ctrl+C zum Stoppen)")
-            print("  --nuclear: Maximale Zerstörung (Root empfohlen)")
+            print("No command specified (use --audit or --monitor)")
+            sys.exit(1)
             
     except KeyboardInterrupt:
-        logger.warning("OPERATION ABORTED BY COMMAND")
+        if 'operator' in locals():
+            operator.stop_monitoring()
+        logger.warning("Operation cancelled")
     except Exception as e:
-        logger.error(f"CRITICAL MISSION FAILURE: {e}")
+        logger.error(f"Fatal error: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
+    # Sichere Dateiberechtigungen
+    os.umask(0o077)
     main()
