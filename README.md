@@ -3,8 +3,6 @@
 # PoisonIvory - Nemesis (Nuclear) Version 2025 
 ### Advanced Security & Threat Monitoring Framework  
 
-![Security](ivory.jpg)  
-
 **Enterprise-grade offensive security platform by Volkan Sah**  
 > [!WARNING]  
 > Professional Use Only - Handle With Extreme Care!  
