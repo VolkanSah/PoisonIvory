@@ -1,10 +1,3 @@
-#  #############  .__  ##################  .__  ########################   #
-#   ______   ____ |__| __________   ____   |__| __  _____________ ___.__.  #
-#   \____ \ /  _ \|  |/  ___/  _ \ /    \  |  \  \/ /  _ \_  __ <   |  |   #
-#   |  |_> >  <_> )  |\___ (  <_> )   |  \ |  |\   (  <_> )  | \/\___  |   #
-#   |   __/ \____/|__/____  >____/|___|  / |__| \_/ \____/|__|   / ____|   #
-#   |__|  PoisonIvory - Nemesis Edition          © 2008-2025 Volkan Sah    # 
-#      github.com/VolkanSah/PoisonIvory/   Born for those who read code    #
 
 #!/usr/bin/env python3
 """
@@ -749,9 +742,9 @@ def main():
     """Hauptfunktion"""
     if len(sys.argv) < 2:
         print("Usage:")
-        print("  python3 cms_security_monitor.py scan <config_file>")
-        print("  python3 cms_security_monitor.py monitor <config_file>")
-        print("  python3 cms_security_monitor.py create-config")
+        print("  python3 PoisonIvory.py scan <config_file>")
+        print("  python3 PoisonIvory.pyy monitor <config_file>")
+        print("  python3 PoisonIvory.py create-config")
         sys.exit(1)
     
     command = sys.argv[1]
