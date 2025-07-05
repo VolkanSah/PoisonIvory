@@ -1,6 +1,6 @@
+# PoisonIvory - Nemesis Nuclear Fusion 
+###### > Version 1.3 - Codename: "Nemesis Reborn"  
 
-![ Security](ivory.jpg)
-# PoisonIvory - Nemesis (Nuclear) Version 2025 
 ### Advanced Security & Threat Monitoring Framework  
 
 **Enterprise-grade offensive security platform by Volkan Sah**  
@@ -34,8 +34,9 @@ Built for:
 ### Core Capabilities  
 - JSON-based configuration system for enterprise deployment  
 - Modular architecture supporting custom security workflows  
-- Nuclear mode for stress testing infrastructure limits  
-- Raw socket packet analysis for maximum performance  
+- **Nuclear Fusion Mode** for stress testing infrastructure limits  
+- Raw socket packet analysis for maximum performance (when available)  
+- Preserves original architecture while enhancing security and performance  
 
 ### Security Integrations  
 | Tool          | Function                     |  
@@ -44,13 +45,14 @@ Built for:
 | Nuclei        | Vulnerability detection      |  
 | SSLScan       | TLS/SSL configuration audit  |  
 | Tor Control   | Circuit management           |  
-| Raw Sockets   | High-performance monitoring  |  
+| Scapy/Raw     | Flexible packet monitoring   |  
 
 ### Advanced Operations  
 - Suspicious activity pattern matching with custom regex  
 - Automatic emergency scanning on threat detection  
 - Continuous monitoring with periodic health checks  
 - Comprehensive JSON reporting for forensic analysis  
+- **Anti-loop mechanisms** for Tor circuit renewal  
 
 ---
 
@@ -58,7 +60,7 @@ Built for:
 
 ### Mandatory  
 - Python 3.9+  
-- Linux environment (Kernel 5.4+)  
+- Linux environment (Kernel 5.4+ recommended)  
 - Root privileges for nuclear mode operations  
 
 ### Security Tools (Partial List)  
@@ -81,7 +83,7 @@ pip3 install requests stem scapy
 
 ## Configuration  
 
-### Example `security_config.json`  
+### Example `cms_security_config.json`  
 ```json
 {
   "domain": "yourdomain.com",
@@ -92,47 +94,65 @@ pip3 install requests stem scapy
   "alert_threshold": 5,
   "malicious_relays": ["ABCD1234EFGH5678", "IJKL91011MNOP1213"],
   "malicious_patterns": ["(?i)(malware|exploit|ransomware)", "(?i)(wp-admin|phpmyadmin)"],
-  "scan_tools": {
-    "nmap": "/usr/bin/nmap",
-    "nikto": "/usr/bin/nikto",
-    "sslscan": "/usr/bin/sslscan"
-  },
-  "monitoring_interval": 300,
-  "enable_traffic_monitoring": true,
   "nuclear_mode": false
 }
 ```
+
+> **Note**: The configuration now supports the `nuclear_mode` option for enabling high-intensity operations.
 
 ---
 
 ## Usage  
 
-### Command Structure  
+### Command Structure (Preserved Original Interface)  
 ```bash
-./PoisonIvory.py --config <config.json> [OPERATION] [OPTIONS]
+python3 PoisonIvory.py [COMMAND] <config_file>
 ```
 
 ### Operations  
 | Command       | Function                                  |  
 |---------------|-------------------------------------------|  
-| `--audit`     | Full security audit of configured targets |  
-| `--monitor`   | Continuous threat monitoring              |  
-| `--nuclear`   | Enable maximum stress testing mode        |  
+| `scan`        | Run full security audit                   |  
+| `monitor`     | Start continuous monitoring               |  
+| `create-config`| Generate default configuration file      |  
+
+### Nuclear Mode Activation  
+Enable `nuclear_mode` in your configuration file for high-intensity operations. When enabled, PoisonIvory will:  
+- Increase network buffer sizes (requires root)  
+- Use aggressive scanning parameters (`-T5 --min-rate 5000`)  
+- Allocate additional system resources  
+- Reduce monitoring intervals  
+
+Example warning at startup:  
+```text
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! NUCLEAR MODE ACTIVATED - EXPECT SYSTEM INSTABILITY !!
+!!    Target servers may experience disruption       !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+```
 
 ### Examples  
 **Run security audit:**  
 ```bash
-./PoisonIvory.py --config security_config.json --audit
+python3 PoisonIvory.py scan config.json
 ```
 
 **Start continuous monitoring:**  
 ```bash
-./PoisonIvory.py --config security_config.json --monitor
+python3 PoisonIvory.py monitor config.json
 ```
 
-**Nuclear stress test:**  
+**Generate default configuration:**  
 ```bash
-sudo ./PoisonIvory.py --config security_config.json --audit --nuclear
+python3 PoisonIvory.py create-config
+```
+
+**Nuclear Mode Example (edit config first):**  
+```json
+{
+  ...,
+  "nuclear_mode": true
+}
 ```
 
 ---
@@ -146,15 +166,15 @@ PoisonIvory embodies three core principles:
    - Raw terminal output and JSON reports only  
    - Errors are learning opportunities, not bugs to be automatically fixed  
 
-2. **Infrastructure-Hardened**  
-   - Kernel-level optimizations under nuclear mode  
-   - Resource-aware operations with process limits  
-   - Secure file handling with strict permissions  
+2. **Original Architecture Preserved**  
+   - Nuclear Fusion Edition maintains Volkan's original code structure  
+   - Critical security fixes integrated without over-engineering  
+   - Seamless upgrade path for existing users  
 
 3. **Offense-Informed**  
    - Adversary-emulating techniques  
    - Threshold-based automatic countermeasures  
-   - Tor circuit warfare capabilities  
+   - Tor circuit warfare capabilities with anti-loop protection  
 
 ---
 
@@ -167,26 +187,56 @@ PoisonIvory embodies three core principles:
 
 ---
 
+## What's New in Nuclear Fusion Edition?  
+
+### Critical Fixes  
+- Command injection vulnerabilities patched  
+- Regex pattern errors corrected  
+- DNS rebinding protection  
+- Thread-safe activity logging  
+
+### Nuclear Mode Features  
+- Kernel-level network optimizations  
+- Aggressive resource allocation  
+- High-intensity scanning parameters  
+- Reduced monitoring intervals  
+
+### Enterprise Enhancements  
+- Tor password authentication support  
+- Secure file permissions (umask 0077)  
+- Anti-loop mechanisms for Tor circuit renewal  
+- Improved error handling and resilience  
+
+---
+
+## Changelog  
+
+### v1.0 → v1.3 Nuclear Fusion  
+| Feature                | Nemesis (v1.0)         | Nuclear Fusion (v1.3)       |  
+|------------------------|------------------------|-----------------------------|  
+| Architecture           | Original CMS-focused   | Enhanced threat monitoring  |  
+| Security               | Basic patterns         | Hardened command execution  |  
+| Performance            | Standard scanning      | Nuclear mode optimization   |  
+| Tor Management         | Basic circuit control  | Password auth + anti-loop   |  
+| Resource Handling      | No limits              | Controlled resource allocation |  
+| File Safety            | Standard permissions   | Strict umask (0077)         |  
+| CLI Interface          | Original structure     | Preserved + nuclear warnings |  
+
+---
+
 ## Development & Credits  
 
 ### Core Development  
 - **Volkan Kücükbudak** ([@volkansah](https://github.com/volkansah)) - Lead Architect  
 
 ### AI-Assisted Development  
-- **DeepSeek-R1** - Security architecture and critical bug resolution  
-- **OpenAI GPT-4o** - Conceptual design and documentation  
+- **DeepSeek-R1** - Tipps for Security hardening and nuclear mode idea 
+- **OpenAI GPT-4o** - Architectural consultation and documentation  
 
-> This project represents a human-AI collaboration where artificial intelligence provided:  
-> - Advanced security pattern design  
-> - Enterprise architecture consultation  
-> - Attack surface analysis  
-> - Critical vulnerability identification  
->  
-> While human expertise guided:  
-> - Operational security considerations  
-> - Ethical implementation boundaries  
-> - Real-world testing validation  
-> - Professional judgment calls  
+> This project represents a human-AI collaboration where:  
+> - Human expertise defined operational requirements and security boundaries  
+> - AI contributed critical vulnerability fixes and performance optimizations  
+> - Joint effort produced the Nuclear Fusion Edition without compromising original design intent  
 
 ---
 
@@ -203,3 +253,6 @@ Copyright © 2025 Volkan Kücükbudak
 Licensed under the Ethical Security Operations License (ESOL v1.0)
 ```
 
+> **PoisonIvory Nuclear Fusion Edition**  
+> Version 1.3 - Codename: "Nemesis Reborn"  
+> Release Date: July 2025
