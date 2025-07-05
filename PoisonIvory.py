@@ -88,7 +88,7 @@ class CMSSecurityMonitor:
                 # SSRF (Server-Side Request Forgery)
             r'(?i)(https?://(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))|metadata\.google\.internal)',
                 # Open Redirect
-            r'(?i)(redirect=|url=|next=|to=|dest=)(https?%3a%2f%2f|https?://)',  %3a%2f%2f = :// URL-kodiert
+            r'(?i)(redirect=|url=|next=|to=|dest=)(https?%3a%2f%2f|https?://)', #  %3a%2f%2f = :// URL-kodiert
                 # HTTP Header Injection
             r'(?i)(\r\n|\n|\r|\%0d|\%0a)(Set-Cookie|Location|Content-Length|:)',
                 # File Upload-Bypass
