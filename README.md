@@ -4,7 +4,7 @@
 # PoisonIvory - Nemesis Version 2025 (DEV)
 ### CMS Security & Tor Monitoring Framework
 ## Log/bugs
-1. **Syntax Error** in Regex Pattern
+1. **Syntax Error** in Regex Pattern fxed
 2. **Memory Leaks**  unclosed Sessions
 3. **Race Conditions** in Threading
 4. **Resource Leaks** by Tor Controller
