@@ -125,4 +125,61 @@ def main():
         
         report = monitor.run_full_security_scan()
         # ... (weiterer Code) ...
+
+## example google api:
+
+import google.generativeai as genai
+import json
+
+def call_gemini_api(api_key, prompt_text, model_name="gemini-1.5-pro-latest", temperature=0.7, max_tokens=4096):
+    """
+    Stellt eine API-Anfrage an Google Gemini mit dynamischen Parametern.
+
+    Args:
+        api_key (str): Dein Google API-Schlüssel.
+        prompt_text (str): Der Text-Prompt für die KI.
+        model_name (str): Der Name des zu verwendenden Gemini-Modells.
+        temperature (float): Die Kreativität der Antwort (0.0-1.0).
+        max_tokens (int): Die maximale Länge der Antwort.
+
+    Returns:
+        str: Die generierte Textantwort der KI.
+        
+    Raises:
+        Exception: Wenn ein Fehler bei der API-Anfrage auftritt.
+    """
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(model_name=model_name)
+        
+        response = model.generate_content(
+            prompt_text,
+            generation_config=genai.types.GenerationConfig(
+                temperature=temperature,
+                max_output_tokens=max_tokens
+            )
+        )
+        
+        # Überprüft, ob die Antwort gültig ist, und gibt den Text zurück
+        if response.candidates and response.candidates[0].content:
+            return response.text
+        else:
+            raise Exception("Keine gültige Antwort von der API erhalten.")
+
+    except Exception as e:
+        raise Exception(f"Fehler bei der Gemini API-Anfrage: {str(e)}")
+
+# Beispiel für die Verwendung in deinem Skript:
+# api_schluessel = "DEIN_API_SCHLUESSEL"
+# prompt_fuer_ki = "Analysiere die folgenden Nmap-Scan-Ergebnisse und gib eine Zusammenfassung: ..."
+#
+# try:
+#    ki_antwort = call_gemini_api(api_schluessel, prompt_fuer_ki)
+#    print(ki_antwort)
+# except Exception as e:
+#    print(f"Fehler: {e}")
+
+
+
+
                 
