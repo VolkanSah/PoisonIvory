@@ -1,0 +1,6 @@
+// example only
+{
+  "model": "gemini-1.5-pro-latest",
+  "system_instruction": "Du bist ein erfahrener Security-Analyst.",
+  "prompt_template": "Analysiere diesen potenziellen Sicherheitsvorfall: - Quell-IP: {source_ip} - Daten-Payload: {payload} - Begründe, ob es sich um eine legitime Bedrohung (hoch/mittel/niedrig) oder einen Fehlalarm handelt."
+}
