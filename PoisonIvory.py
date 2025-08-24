@@ -272,7 +272,7 @@ class CMSSecurityMonitor:
                 time.sleep(10)
 
     
-    # ========== VULNERABILITY ASSESSMENT - DEIN ORIGINALCODE ==========
+    # ========== VULNERABILITY ASSESSMENT -==========
     def vulnerability_assessment(self, target=None):
         """Umfassende Vulnerability Assessment"""
         target = target or self.domain
@@ -330,7 +330,7 @@ class CMSSecurityMonitor:
         except Exception as e:
             return f"OpenVAS error: {e}"
 
-    # ========== TOR MONITORING - DEIN ORIGINALCODE ==========
+    # ========== TOR MONITORING  ==========
     def manage_tor_circuits(self):
         """Tor Circuit Management"""
         controller = self.authenticate_tor_controller()
@@ -392,7 +392,7 @@ class CMSSecurityMonitor:
         except Exception as e:
             logger.error(f"Traffic monitoring error: {e}")
 
-    # ========== REPORTING - DEIN ORIGINALCODE ==========
+    # ========== REPORTING - ==========
     def generate_comprehensive_report(self):
         """Generiert umfassenden Bericht"""
         timestamp = datetime.now().isoformat()
