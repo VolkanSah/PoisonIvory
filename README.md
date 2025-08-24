@@ -256,5 +256,5 @@ Licensed under the Ethical Security Operations License (ESOL v1.0)
 ```
 
 > **PoisonIvory Nuclear Fusion Edition**  
-> Version 1.3 - Codename: "Nemesis Reborn"  
-> Release Date: July 2025
+> Version 2.0.0 unstable - Codename: "Nemesis Reborn"  
+> Release Date: 24/Aug 2025
