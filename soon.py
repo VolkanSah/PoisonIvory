@@ -8,7 +8,7 @@ class CMSSecurityMonitor:
         self.scan_results = {}
         # ... restliche Initialisierung wie bisher ...
         
-    # === Gemini / Google AI ===
+    # === Gemini / Google AI === nur als beispiel! Tommy!
     def call_gemini_api(self, prompt_text, model_name="gemini-1.5-pro-latest", temperature=0.7, max_tokens=4096):
         try:
             genai.configure(api_key=self.google_api_key)
@@ -72,7 +72,7 @@ class CMSSecurityMonitor:
             logger.critical("Scan abgebrochen: Server nicht verifiziert")
             return None
 
-        # hier kommt dein vorhandener Scan-Code
+        #  kommt dein vorhandener Scan-Code
         self.scan_results['vulnerabilities'] = self.vulnerability_assessment()
 
         # Neue Bugs & AI Workflow
