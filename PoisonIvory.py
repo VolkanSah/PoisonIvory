@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PoisonIvory 1.3 - Nemesis Nuclear Fusion Edition
+PoisonIvory 1.3.1 - Nemesis Nuclear Fusion Edition
 Volkan's Original Architecture with Critical Enhancements
 """
 
@@ -66,24 +66,130 @@ class CMSSecurityMonitor:
         self.alert_threshold = config.get('alert_threshold', 5)
         self.lock = threading.Lock()
         
-        # Security Patterns
+# Security Patterns deluxe
         self.malicious_patterns = [
-            r'(?i)(abuse|child|illegal|hack|exploit|malware|ddos)',
-            r'(?i)(admin|login|wp-admin|phpmyadmin|admin\.php)',
-            r'(?i)(\.\.\/|\.\.\\|%2e%2e|%252e%252e)',
-            r'(?i)(select|union|drop|insert|update|delete|script)',
-            r'(?i)(<script|javascript:|vbscript:|onload=|onerror=)',
-            r'(?i)(eval\(|base64_decode|exec\(|system\()',
-            r'(?i)(password|passwd|secret|key|token)',
-            # FIXED REGEX:
-            r'(?i)(\b(wget|curl|netcat|nc|bash|sh|cmd|powershell|python|perl)\b|\|\||\&\&|\$\(|\\`)',
-            r'(?i)(\.\.%2f|\.\.%5c|%2e%2e%2f|%252e%252e%252f|\~\/|\.\.\\x2f)',
-            r'(?i)(/etc/passwd|/proc/self|\.env|\.git/config|wp-config\.php|\.htaccess)',
-            r'(?i)(https?://(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))|metadata\.google\.internal)',
+            # Content abuse + phishing/scam
+            r'(?i)(abuse|child|illegal|hack|exploit|malware|ddos|phishing|scam)',
+            
+            # Admin/auth paths + common admin panels
+            r'(?i)(admin|login|wp-admin|phpmyadmin|admin\.php|administrator|manager)',
+            
+            # Path traversal - fixed escaping + unicode bypasses
+            r'(?i)(\.\.\/|\.\.\\|%2e%2e|%252e%252e|%c0%ae|%c1%9c)',
+            
+            # SQL injection - more precise + context aware
+            r'(?i)(select|union|drop|insert|update|delete|script)(\s+(all|distinct|from|into|where|order|group|having)|\s*\(|\s*;)',
+            
+            # XSS - expanded common vectors
+            r'(?i)(<script|javascript:|vbscript:|onload=|onerror=|onclick=|onmouseover=|<iframe|<object)',
+            
+            # Code execution - fixed escaping + more functions
+            r'(?i)(eval\(|base64_decode\(|exec\(|system\(|shell_exec\(|passthru\(|proc_open\()',
+            
+            # Credentials + JWT tokens
+            r'(?i)(password|passwd|secret|key|token|jwt|bearer)',
+            
+            # Command injection - already good, just added more commands
+            r'(?i)(\b(wget|curl|netcat|nc|bash|sh|cmd|powershell|python|perl|ruby|whoami|id|uname)\b|\|\||\&\&|\$\(|`[^`]*`)',
+            
+            # Path traversal encoded - added more variants
+            r'(?i)(\.\.%2f|\.\.%5c|%2e%2e%2f|%252e%252e%252f|\~\/|\.\.\\x2f|%2e%2e%5c)',
+            
+            # Sensitive files - added common config files
+            r'(?i)(/etc/passwd|/proc/self|\.env|\.git/config|wp-config\.php|\.htaccess|web\.config|\.bash_history)',
+            
+            # SSRF - added IPv6 localhost + cloud metadata
+            r'(?i)(https?://(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))|metadata\.google\.internal|169\.254\.169\.254)',
+            
+            # Open redirects - same as original
             r'(?i)(redirect=|url=|next=|to=|dest=)(https?%3a%2f%2f|https?://)',
-            r'(?i)(\r\n|\n|\r|\%0d|\%0a)(Set-Cookie|Location|Content-Length|:)',
-            r'(?i)\.(php|exe|dll|js|jar|jsp)(\.|$|\?|\s)',
-            r'(?i)(php://|file://|zip://|expect://|data:text|http://)',
+            
+            # HTTP header injection - fixed regex syntax
+            r'(?i)(\r\n|\n|\r|%0d|%0a)(Set-Cookie|Location|Content-Length|Host):',
+            
+            # Dangerous file extensions - added more
+            r'(?i)\.(php|exe|dll|js|jar|jsp|asp|aspx|pl|py|rb)(\.|$|\?|\s)',
+            
+            # File inclusion - added more protocols + fixed http duplicate
+            r'(?i)(php://|file://|zip://|expect://|data:text|ftp://|gopher://|dict://)',
+            
+            # XXE injection
+            r'(?i)(<!DOCTYPE[^>]*\[|<!ENTITY|SYSTEM\s+["\']|PUBLIC\s+["\'])',
+            
+            # LDAP injection
+            r'(?i)(\*\)|&\(|\|\(|\!\(|cn=\*|uid=\*)',
+            
+            # Template injection (SSTI)
+            r'(?i)(\{\{.*\}\}|\{%.*%\}|\$\{.*\}|<%.*%>)',
+            
+            # NoSQL injection
+            r'(?i)(\$ne|\$gt|\$lt|\$regex|\$where|\$exists|\$or|\$and)',
+            
+            # Deserialization attacks
+            r'(?i)(pickle\.loads|yaml\.load|unserialize|readObject|__reduce__|AC ED 00 05)',
+            
+            # Sleep/time-based attacks
+            r'(?i)(sleep\s*\(\d+\)|waitfor\s+delay|pg_sleep\s*\(|benchmark\s*\()',
+            
+            # Expression Language injection
+            r'(?i)(#\{.*\}|@\{.*\}|%\{.*\}|\$\{T\()',
+            
+            # More command chaining
+            r'(?i)(\|base64\s+-d|\|sh|\|bash|;\s*(wget|curl|nc))',
+            
+            # Backup/sensitive file detection
+            r'(?i)\.(bak|backup|old|tmp|temp|orig|save|swp|~),
+            
+            # Directory listing signatures
+            r'(?i)(Index\s+of\s+/|Directory\s+Listing|Parent\s+Directory)',
+            
+            # More protocol handlers
+            r'(?i)(jar:http://|jar:https://|sftp://|tftp://|ldap://)',
+            
+            # SQL boolean-based injection
+            r'(?i)(\bAND\s+\d+=\d+|\bOR\s+\d+=\d+|AND\s+1=1|OR\s+1=1)',
+            
+            # More XSS vectors
+            r'(?i)(alert\s*\(|confirm\s*\(|prompt\s*\(|document\.cookie|eval\s*\()',
+            
+            # Cloud metadata endpoints
+            r'(?i)(metadata/instance|latest/meta-data|metadata\.azure\.com)',
+            
+            # More sensitive files
+            r'(?i)(/proc/version|/proc/cmdline|\.ssh/|\.aws/credentials)',
+            
+            # Node.js/NPM supply chain attacks (2024/2025 trend)
+            r'(?i)(require\s*\(\s*["\']child_process["\']|spawn\s*\(|exec\s*\(.*node)',
+            r'(?i)(XMLHttpRequest\.prototype|web3|crypto.*wallet|ethereum|bitcoin)',
+            r'(?i)(javascript-obfuscator|obfuscated.*payload|_0x[0-9a-f]{6})',
+            
+            # Modern phishing/social engineering
+            r'(?i)(captcha.*verification|verify.*human|click.*continue)',
+            r'(?i)(urgent.*action|account.*suspended|verify.*immediately)',
+            
+            # Cryptocurrency targeting patterns
+            r'(?i)(metamask|coinbase|binance|crypto.*wallet|private.*key)',
+            r'(?i)(seed.*phrase|mnemonic|recovery.*phrase|wallet.*connect)',
+            
+            # AI/ML evasion techniques
+            r'(?i)(honeypot.*detect|sandbox.*evasion|vm.*detection)',
+            r'(?i)(antivm|anti.*debug|evasion.*technique)',
+            
+            # Modern file exfiltration
+            r'(?i)(discord\.com/api/webhooks|telegram.*bot|pastebin\.com/raw)',
+            r'(?i)(data:image/.*base64|btoa\s*\(|atob\s*\()',
+            
+            # Edge device exploitation (Palo Alto, Fortinet, Ivanti)
+            r'(?i)(panos|fortios|ivanti|pulse.*secure|globalprotect)',
+            r'(?i)(/dana-na/|/api/v1/|/remote/login|/vpn/)',
+            
+            # Modern XSS/DOM manipulation
+            r'(?i)(postMessage\s*\(|addEventListener\s*\(.*message)',
+            r'(?i)(innerHTML\s*=|outerHTML\s*=|insertAdjacentHTML)',
+            
+            # Supply chain indicators
+            r'(?i)(npm.*install|pip.*install|composer.*require|gem.*install).*--unsafe',
+            r'(?i)(typosquat|dependency.*confusion|package.*hijack)',
         ]
         
         # Malicious Tor relays
