@@ -224,6 +224,9 @@ PoisonIvory embodies three core principles:
 | File Safety            | Standard permissions   | Strict umask (0077)         |  
 | CLI Interface          | Original structure     | Preserved + nuclear warnings |  
 
+
+### v1.3.1
+- update Security Patterns
 ---
 
 ## Development & Credits  
