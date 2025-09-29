@@ -235,6 +235,38 @@ class CMSSecurityMonitor:
                 pass
         sys.exit(0)
 
+    def run_full_security_scan(self):
+        """Koordiniert den vollständigen Sicherheitsscan (Nuclear Fusion)"""
+        logger.info("[!!!] Starting Nuclear Fusion Scan [!!!]")
+        
+        # 1. Targets bestimmen
+        target = self.domain or self.onion_address
+        if not target:
+            logger.error("No domain or onion address configured.")
+            return None
+        
+        # 2. Erreichbarkeits-Check
+        if not self.check_domain_reachable(target):
+            logger.warning(f"Target {target} is unreachable. Skipping full scan.")
+            # Wir fahren fort, um zumindest leere Berichte zu generieren
+            self.scan_results = {'ports': {}, 'vulnerabilities': {}}
+        else:
+            # 3. Port Scan (Füllt self.scan_results['ports'])
+            self.comprehensive_port_scan(target)
+            
+            # 4. Vulnerability Assessment (Füllt self.scan_results['vulnerabilities'])
+            self.vulnerability_assessment(target)
+        
+        # 5. Tor-Management (optional)
+        if TOR_AVAILABLE and (self.domain and self.domain.endswith('.onion')):
+            self.manage_tor_circuits()
+        
+        # 6. Report generieren
+        report = self.generate_comprehensive_report()
+        
+        logger.info("[!!!] Nuclear Fusion Scan Complete [!!!]")
+        return report
+
     def run_command(self, cmd, timeout=300):
         """Führt Kommando aus mit Nuclear-Optimierungen"""
         # Nuclear Mode: Höhere Timeouts und Ressourcen
@@ -270,6 +302,26 @@ class CMSSecurityMonitor:
                 resource.setrlimit(resource.RLIMIT_AS, (-1, -1))
 
     # ========== ORIGINAL SCANNER METHODEN MIT NUCLEAR UPGRADES ==========
+
+    def check_onion_reachable(self, target):
+        """Prüft Onion-Erreichbarkeit mit SOCKS5 Proxy"""
+        # Da dein Test die Isolation bestätigen soll, lassen wir den Proxy hier
+        # auf einem dedizierten Port, oder nutzen den Standard 9050.
+        proxies = {
+            'http': 'socks5h://127.0.0.1:9050',
+            'https': 'socks5h://127.0.0.1:9050'
+        }
+        
+        try:
+            # Hier den URL-Parser nutzen, falls Target noch kein Schema hat
+            url = target if target.startswith(('http://', 'https://')) else f"http://{target}"
+            
+            response = requests.get(url, proxies=proxies, timeout=15)
+            # Wenn Tor nicht läuft oder nicht erreichbar ist, wird dieser Aufruf fehlschlagen
+            return response.status_code < 400
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Onion target not reachable via SOCKS5 proxy: {e}")
+            return False
     
     def check_domain_reachable(self, target=None):
         """Prüft Erreichbarkeit mit DNS-Rebinding-Schutz"""
@@ -311,6 +363,33 @@ class CMSSecurityMonitor:
             }
         
         return port_results
+    
+    def _parse_nmap_ports(self, nmap_output):
+        """
+        Analysiert die Nmap-Textausgabe und extrahiert offene Ports.
+        Dies ist eine vereinfachte Text-Parsing-Methode (keine XML-Abhängigkeit).
+        """
+        open_ports = []
+        if not nmap_output:
+            logger.warning("Nmap-Ausgabe ist leer oder der Scan ist fehlgeschlagen.")
+            return []
+
+        # Regex, um offene Ports zu finden (Port/Service-Kombinationen)
+        # Beispiel: 80/tcp open http
+        pattern = re.compile(r"(\d+)/(\w+)\s+open\s+([\w-]+)")
+        
+        for line in nmap_output.split('\n'):
+            match = pattern.search(line)
+            if match:
+                open_ports.append({
+                    'portid': match.group(1),
+                    'protocol': match.group(2),
+                    'service': match.group(3)
+                })
+        
+        logger.info(f"Nmap-Parsing abgeschlossen. {len(open_ports)} offene Ports gefunden.")
+        return open_ports
+
 
     def trigger_emergency_scan(self, suspicious_ip):
         """Triggert Emergency Scan mit Anti-Loop"""
