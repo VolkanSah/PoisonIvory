@@ -138,7 +138,7 @@ class CMSSecurityMonitor:
             r'(?i)(\|base64\s+-d|\|sh|\|bash|;\s*(wget|curl|nc))',
             
             # Backup/sensitive file detection
-            r'(?i)\.(bak|backup|old|tmp|temp|orig|save|swp|~),
+            r'(?i)\.(bak|backup|old|tmp|temp|orig|save|swp|~)',
             
             # Directory listing signatures
             r'(?i)(Index\s+of\s+/|Directory\s+Listing|Parent\s+Directory)',
