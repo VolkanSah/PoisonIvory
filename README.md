@@ -1,27 +1,25 @@
 # PoisonIvory (NF 2.0)
+####### Version 2.0.0 (unstable) - Codename: "Nemesis Reborn" - PyFundaments Edition
 
-> Version 2.0.0 (unstable) - Codename: "Nemesis Reborn" - PyFundaments Edition
-
-> ⚠️ **Note:** This project is currently undergoing a major architectural overhaul (PyFundaments Edition) to achieve enterprise-grade modularity and security. Features are subject to change.
-
+> [!NOTE]  
+> This project is currently undergoing a major architectural overhaul (PyFundaments Edition) to achieve enterprise-grade modularity and security. Features are subject to change.
 
 
-## Enterprise Security & Threat Orchestration Framework
+### Enterprise Security & Threat Orchestration Framework
 
 **Elite Offensive Security Platform** by Volkan Sah
-
-> ⚠️ **Warning:** Professional Use Only - Handle With Extreme Care!  
+> [!WARNING]
+> **Warning:** Professional Use Only - Handle With Extreme Care!  
 > This tool is designed for experienced security professionals and red teams. PoisonIvory is not for script kiddies! Expect to troubleshoot, analyze raw outputs, and interpret security events.
 
----
 
-## Architectural Overhaul: PyFundaments Edition
+### Architectural Overhaul: PyFundaments Edition
 
 PoisonIvory 2.0 is rebuilt using the **PyFundaments pattern**, ensuring maximum security, modularity, and testability. All external dependencies, configurations, and sensitive keys are decoupled from the core logic via **Dependency Injection (DI).**
 
 
 
-## Core Service Breakdown
+### Core Service Breakdown
 
 | Module         | Purpose                                                                 | Criticality       |
 |----------------|-------------------------------------------------------------------------|-----------------|
@@ -32,7 +30,7 @@ PoisonIvory 2.0 is rebuilt using the **PyFundaments pattern**, ensuring maximum 
 
 
 
-## What is PoisonIvory?
+### What is PoisonIvory?
 
 PoisonIvory is an elite security operations platform combining:
 
@@ -50,22 +48,22 @@ PoisonIvory is an elite security operations platform combining:
 
 
 
-## Key Features
+### Key Features
 
-### Core Capabilities
+#### Core Capabilities
 
 - PyFundaments Architecture with secure DI
 - JSON-based configuration system
 - Modular service architecture
 - **Nuclear Fusion Mode** for stress testing infrastructure
 
-### AI & Intelligence Augmentation
+#### AI & Intelligence Augmentation
 
 - **Ground-Truth Research:** LLMs with search grounding for latest CVEs & Zero-Days
 - **Contextual Reporting:** Concise actionable summaries
 - **Provider Agnostic:** KIConnector supports multiple LLM APIs
 
-### Tool & Security Integrations
+#### Tool & Security Integrations
 
 | Tool       | Function                           | Managed By  |
 |------------|-----------------------------------|------------|
@@ -76,7 +74,7 @@ PoisonIvory is an elite security operations platform combining:
 
 ---
 
-## Requirements
+### Requirements
 
 - **Python 3.9+**
 - **Linux environment** (Kernel 5.4+ recommended)
@@ -87,9 +85,9 @@ PoisonIvory is an elite security operations platform combining:
 
 
 
-## Configuration
+### Configuration
 
-### Example `cms_security_config.json`
+#### Example `cms_security_config.json`
 
 ```json
 {
@@ -102,7 +100,7 @@ PoisonIvory is an elite security operations platform combining:
 }
 ````
 
-### Fundaments (Sensitive, external)
+#### Fundaments (Sensitive, external)
 
 ```bash
 GEMINI_API_KEY="AI-KEY-123456789"
@@ -112,7 +110,7 @@ TOOL_NMAP_PATH="/usr/local/bin/nmap"
 
 ---
 
-## Usage
+### Usage
 
 ```bash
 python3 main.py [COMMAND] <config_file>
@@ -128,7 +126,7 @@ python3 main.py [COMMAND] <config_file>
 
 ---
 
-## Legal & Ethical Notice
+### Legal & Ethical Notice
 
 - ⚖️ **Legal Compliance:** Test only systems you own or have authorization for
 - 🚫 **No Warranty:** Provided "as-is"
@@ -136,7 +134,7 @@ python3 main.py [COMMAND] <config_file>
 
 ---
 
-## Development & Credits
+### Development & Credits
 
 **Core Development:** Volkan Kücükbudak (@volkansah) - Lead Architect
 **AI-Assisted Overhaul:** Gemini (Google) - Modular design & safe I/O handling
@@ -145,11 +143,12 @@ python3 main.py [COMMAND] <config_file>
 
 ---
 
-## Support the Project
+### Support the Project
 
 - ⭐ Star on GitHub
 - 🛠 Contribute via pull requests (experts only)
 - Use ethically & share knowledge responsibly
 
+#### Copyright 
 > © 2025 Volkan Kücükbudak
 > Licensed under **Ethical Security Operations License (ESOL v1.0)** 😄 Ok GPL3
