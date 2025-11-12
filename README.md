@@ -252,7 +252,7 @@ If you value this work:
 
 ```text
 Copyright © 2025 Volkan Kücükbudak
-Licensed under the Ethical Security Operations License (ESOL v1.0)
+Licensed under the Ethical Security Operations License (ESOL v1.0) 😄 Ok GPL3
 ```
 
 > **PoisonIvory Nuclear Fusion Edition**  
