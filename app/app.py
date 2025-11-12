@@ -19,7 +19,6 @@ async def _handle_scan_command(fundaments: Dict[str, Any], core_service: Any):
     domain = config.get("TARGET_DOMAIN") # Annahme: Domain wird über Config/CLI übergeben
     
     # === 1. ETHICAL GATE CHECK (Mandatory for 'scan') ===
-    # Der EthicalGates-Dienst wird nur geladen, wenn er in main.py initialisiert wurde.
     ethical_gates = fundaments.get("ethical_gates")
     if not ethical_gates:
         logger.critical("Ethical Gates service not loaded. Cannot run aggressive 'scan' command.")
@@ -27,27 +26,37 @@ async def _handle_scan_command(fundaments: Dict[str, Any], core_service: Any):
 
     logger.info(f"[*] Starting mandatory ownership verification for {domain}...")
     
-    # Wichtig: Wir nutzen den Fundament-Dienst, der die Logik kapselt.
-    # Wichtig: Wir nutzen await, da es sich um eine asynchrone I/O-Operation handelt (z.B. HTTP-Call zur Token-Prüfung).
     if not await ethical_gates.verify_ownership(domain):
         logger.critical("SCAN ABORTED. Server ownership verification failed. Check documentation.")
         sys.exit(1)
 
     logger.info("[*] Ownership successfully verified. Proceeding with scan.")
     
-    # === 2. AI AUGMENTATION INJECTION (Optional) ===
-    # KI Connector ist ein optionaler Fundament-Dienst.
+    # === 2. TOOL MANAGER CHECK (Mandatory for 'scan') ===
+    tool_manager = fundaments.get("tool_manager")
+    if not tool_manager:
+        logger.critical("Tool Manager service is mandatory for scanning but is not loaded. Exiting.")
+        sys.exit(1)
+    
+    # === 3. AI AUGMENTATION INJECTION (Optional) ===
     ki_connector = fundaments.get("ki_connector")
     
     if ki_connector:
         logger.info("[*] AI Augmentation active (Research, Workflow Analysis).")
-        # Inject the connector into the Core function
-        report = await core_service.run_full_security_scan(domain=domain, ki_connector=ki_connector)
+        # Inject both KI Connector and Tool Manager into the Core function
+        report = await core_service.run_full_security_scan(
+            domain=domain, 
+            ki_connector=ki_connector,
+            tool_manager=tool_manager
+        )
     else:
         logger.warning("[!] AI Connector not loaded (Missing API key). Running standard scan.")
-        report = await core_service.run_full_security_scan(domain=domain)
+        report = await core_service.run_full_security_scan(
+            domain=domain,
+            tool_manager=tool_manager
+        )
 
-    # 3. Report-Ausgabe (Delegiert an Core, z.B. JSON/Markdown Export)
+    # 4. Report-Ausgabe (Delegiert an Core, z.B. JSON/Markdown Export)
     if report:
         logger.info("Scan and analysis complete.")
         # Beispiel für einen weiteren Fundament-Dienst, der den Report speichert
@@ -88,9 +97,12 @@ async def start_application(fundaments: Dict[str, Any]):
     # --- 2. COMMAND DISPATCH ---
     
     if command == "scan":
-        # Prüfung auf benötigten Service (Ethical Gates)
+        # Prüfung auf benötigten Services (Ethical Gates & Tool Manager)
         if not fundaments.get("ethical_gates"):
             logger.critical("Cannot run 'scan' command: 'ethical_gates' fundament service is not available.")
+            return
+        if not fundaments.get("tool_manager"): # NEUE PRÜFUNG HIER
+            logger.critical("Cannot run 'scan' command: 'tool_manager' fundament service is not available.")
             return
 
         await _handle_scan_command(fundaments, core_service)
@@ -147,8 +159,9 @@ if __name__ == '__main__':
             return default
 
     class DummyCore:
-        async def run_full_security_scan(self, domain, ki_connector=None):
-            logger.info(f"[DummyCore] Simulating scan on {domain}. KI active: {bool(ki_connector)}")
+        # NEU: Signature angepasst, um tool_manager zu akzeptieren
+        async def run_full_security_scan(self, domain, ki_connector=None, tool_manager=None): 
+            logger.info(f"[DummyCore] Simulating scan on {domain}. KI active: {bool(ki_connector)}, Tools active: {bool(tool_manager)}")
             return {"status": "ok", "summary": "Simulated scan complete."}
     
     class DummyGates:
@@ -160,10 +173,16 @@ if __name__ == '__main__':
         def save_report(self, report, path):
             logger.info(f"[DummyIO] Report saved to simulated path {path}.")
 
+    class DummyToolManager: # NEU: Dummy Tool Manager für Tests
+        async def execute_tool(self, tool_name: str, target: str, args: Optional[list] = None) -> Dict[str, Any]:
+            logger.info(f"[DummyTools] Simulating tool execution: {tool_name} on {target}.")
+            return {"output": "Simulated scan result.", "error": "", "return_code": 0}
+
     test_fundaments = {
         "config": DummyConfig(),
         "poisonivory_core": DummyCore(),
-        "ethical_gates": DummyGates(), # Optionaler Dienst, der geladen ist
+        "ethical_gates": DummyGates(), # Obligatorischer Dienst
+        "tool_manager": DummyToolManager(), # Obligatorischer Dienst
         "ki_connector": "DummyKI",    # Optionaler Dienst, der geladen ist
         "io_handler": DummyIO()       # Optionaler Dienst, der geladen ist
     }
