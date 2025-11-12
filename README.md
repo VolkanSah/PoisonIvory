@@ -1,5 +1,5 @@
 
-# PoisonIvory "Nemesis Reborn" + AI Feature
+# PoisonIvory (NF1.3)
 ###### > Version 2.0.0(dev) - Codename: "Nemesis Reborn" + AI Feature
 ![ Security](ivory.jpg)
 
