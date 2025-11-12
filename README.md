@@ -1,6 +1,3 @@
-Hier ist eine saubere Markdown-Version für dein Repo:
-
-````markdown
 # PoisonIvory (NF 2.0)
 
 > Version 2.0.0 (unstable) - Codename: "Nemesis Reborn" - PyFundaments Edition
