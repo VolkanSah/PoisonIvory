@@ -1,5 +1,5 @@
 # PoisonIvory (NF 2.0)
-###### Version 2.0.0 (unstable) - Codename: "Nemesis Reborn" - PyFundaments Edition
+###### Version 2.0.0 (unstable) - Codename: "Nemesis Reborn" + AI
 
 > [!NOTE]  
 > This project is currently undergoing a major architectural overhaul (PyFundaments Edition) to achieve enterprise-grade modularity and security. Features are subject to change.
