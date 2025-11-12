@@ -3,6 +3,9 @@
 ###### > Version 2.0.0(dev) - Codename: "Nemesis Reborn" + AI Feature
 ![ Security](ivory.jpg)
 
+> [!NOTE]  
+> Not testet, not finished! Working on the idea. 
+
 ### Advanced Security & Threat Monitoring Framework  
 
 **Enterprise-grade offensive security platform by Volkan Sah**  
