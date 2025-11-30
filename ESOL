@@ -1,0 +1,38 @@
+## Ethical Security Operations License (ESOL v1.0)
+
+### Section 1: Preamble and Scope
+
+The **Ethical Security Operations License (ESOL v1.0)** is an **additional condition** supplementing the **GNU General Public License, Version 3 (GPLv3)** under which the covered software (hereinafter "the Work," e.g., NCF Threat Auditor, NCF WormHunter) is distributed.
+
+By utilizing the Work, the Licensee agrees to adhere to both the terms of the GPLv3 and the specific, mandatory ethical constraints defined herein.
+
+### Section 2: Mandatory Ethical Use and Purpose
+
+The grant of rights under this License is **expressly conditioned** upon the Licensee's continuous adherence to the following ethical use limitations:
+
+1.  **Authorized Use Only:** The Work shall be used **exclusively** for **defensive security operations (Blue Teaming)**, **authorized penetration testing (Red Teaming)**, **vulnerability research**, and **security compliance auditing**.
+2.  **Explicit Authorization:** Any offensive use (including, but not limited to, scanning, exploiting, or enumerating vulnerabilities) against a target system requires **explicit, written authorization** from the rightful owner of that system prior to execution.
+3.  **Educational and Research Integrity:** Use of the Work for educational purposes must strictly adhere to legal and ethical frameworks, and must not result in unauthorized disruption or harm to third parties.
+
+### Section 3: Prohibited Use (Malicious Activities)
+
+Notwithstanding any freedoms granted by the GPLv3, the Licensee is **strictly prohibited** from using the Work, in whole or in part, for the following purposes:
+
+* **Unauthorized Access:** Gaining or attempting to gain unauthorized access to computer systems, networks, or data.
+* **Harm Generation:** Generating, distributing, or aiding in the spread of **malicious software** (Malware, Viruses, Worms, Ransomware) or **phishing/scam campaigns**.
+* **Disruption:** Engaging in activities that cause unauthorized denial-of-service (DoS/DDoS) or any form of system disruption or instability without explicit prior consent.
+* **Legal Violation:** Any activity that violates local, national, or international laws concerning computer misuse, data protection, or cybercrime.
+
+### Section 4: Violation and Termination
+
+Failure to comply with **any** provision of this ESOL v1.0 shall constitute a **material breach** of the License, resulting in the **immediate and automatic termination** of all rights granted under both this License and the accompanying GPLv3.
+
+The licensor reserves the right to seek all remedies available by law for any breach of this ethical contract.
+
+---
+
+### Final Licensing Statement
+
+**The Work is dual-licensed under the GNU General Public License, Version 3, and the Ethical Security Operations License, Version 1.0 (ESOL v1.0).**
+
+**The terms of the ESOL v1.0 take precedence in matters concerning the ethical and legal scope of the Work's use.**
