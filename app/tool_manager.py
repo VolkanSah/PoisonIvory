@@ -25,9 +25,11 @@ class ToolManager:
         self.config = config
         # Pfade aus der Konfiguration laden. Fallbacks sind wichtig.
         self.tool_paths = {
+            # Red
             "nmap": config.get("TOOL_NMAP_PATH", "/usr/bin/nmap"),
             "nuclei": config.get("TOOL_NUCLEI_PATH", "/usr/bin/nuclei"),
             "sslscan": config.get("TOOL_SSLSCAN_PATH", "/usr/bin/sslscan"),
+            # Blue
             "suricata": config.get("TOOL_SURICATA_PATH", "/usr/bin/suricata"),
             "tcpdump": config.get("TOOL_TCPDUMP_PATH", "/usr/sbin/tcpdump"),
             "yara": config.get("TOOL_YARA_PATH", "/usr/bin/yara"),
