@@ -118,19 +118,19 @@ class PoisonIvoryCore:
             logger.critical(f"A critical error occurred during the scan: {e}")
             final_report["error"] = f"Critical Scan Failure: {str(e)}"
             return final_report
-
-```eof
-
----
-
+##
+##```eof
+##
+##---
+##
 ### Was diese Architektur so robust macht:
-
-1.  **Explizite Übergabe (Injection):**
-    * Die `PoisonIvoryCore` wird in `main.py` mit **Basisdiensten** (`config`, `io_handler`) initialisiert.
-    * Die kritischen, **dynamischen Dienste** (`tool_manager`, `ki_connector`) werden erst zur Laufzeit in `run_full_security_scan` injiziert. Das zwingt die `app.py` (Orchestrierung) dazu, sicherzustellen, dass sie da sind, wenn sie gebraucht werden.
-2.  **Klarer Workflow:** Der Scan ist in logische, sequenzielle Schritte unterteilt (`_run_basic_scan`, `KI-Bug-Recherche`, `KI-Analyse`).
-3.  **Abstraktion:** Die Core-Logik weiß nicht, **wie** der `ToolManager` Nmap aufruft oder **wie** der `KIConnector` mit Google spricht. Sie weiß nur, **was** sie von ihnen verlangen kann (`execute_tool`, `research_bugs`).
-4.  **Asynchrone Ausführung:** Durch die Nutzung von `await` für alle I/O-Operationen (externe Tools, KI-APIs) bleibt die Anwendung reaktionsschnell und kann mehrere Aufgaben gleichzeitig ausführen (wenn Sie dies später implementieren möchten).
-5.  **Optionale Features:** Der KI-Augmentierungs-Teil ist in einem klaren `if ki_connector:` Block gekapselt, was die **Graceful Degradation** garantiert, falls der API-Schlüssel fehlt.
-
-```
+##
+##1.  **Explizite Übergabe (Injection):**
+##    * Die `PoisonIvoryCore` wird in `main.py` mit **Basisdiensten** (`config`, `io_handler`) initialisiert.
+##    * Die kritischen, **dynamischen Dienste** (`tool_manager`, `ki_connector`) werden erst zur Laufzeit in `run_full_security_scan` injiziert. Das zwingt die `app.py` (Orchestrierung) dazu, sicherzustellen, dass sie da sind, wenn sie gebraucht werden.
+##2.  **Klarer Workflow:** Der Scan ist in logische, sequenzielle Schritte unterteilt (`_run_basic_scan`, `KI-Bug-Recherche`, `KI-Analyse`).
+##3.  **Abstraktion:** Die Core-Logik weiß nicht, **wie** der `ToolManager` Nmap aufruft oder **wie** der `KIConnector` mit Google spricht. Sie weiß nur, **was** sie von ihnen verlangen kann (`execute_tool`, `research_bugs`).
+##4.  **Asynchrone Ausführung:** Durch die Nutzung von `await` für alle I/O-Operationen (externe Tools, KI-APIs) bleibt die Anwendung reaktionsschnell und kann mehrere Aufgaben gleichzeitig ausführen (wenn Sie dies später implementieren möchten).
+##5.  **Optionale Features:** Der KI-Augmentierungs-Teil ist in einem klaren `if ki_connector:` Block gekapselt, was die **Graceful Degradation** garantiert, falls der API-Schlüssel fehlt.
+##
+##```
