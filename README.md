@@ -36,7 +36,7 @@ PoisonIvory is an elite security operations platform combining:
 
 - **Infrastructure Auditing:** Scan domains, onion services, and network assets.
 - **Intelligent Augmentation (AI):** Contextual vulnerability research & reporting using LLMs.
-- **Vulnerability Assessment:** Integration with tools like Nmap, Nuclei, SSLScan.
+- **Vulnerability Assessment:** Integration with tools like Nmap, Nuclei, SSLScan and all other toos you need
 - **Regulated Scanning:** Enforced via EthicalGates.
 - **Automated Response:** Threshold-based emergency scanning and reporting.
 
