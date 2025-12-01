@@ -23,7 +23,7 @@ class ToolManager:
             config: Der injizierte Konfigurationsdienst (Fundament).
         """
         self.config = config
-        # Pfade aus der Konfiguration laden. Fallbacks sind wichtig.
+        # Pfade aus der Konfiguration laden. Fallbacks sind wichtig.!!!
         self.tool_paths = {
             # Red
             "nmap": config.get("TOOL_NMAP_PATH", "/usr/bin/nmap"),
