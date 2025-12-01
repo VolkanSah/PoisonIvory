@@ -33,6 +33,8 @@ class ToolManager:
             "suricata": config.get("TOOL_SURICATA_PATH", "/usr/bin/suricata"),
             "tcpdump": config.get("TOOL_TCPDUMP_PATH", "/usr/sbin/tcpdump"),
             "yara": config.get("TOOL_YARA_PATH", "/usr/bin/yara"),
+            # Your needs below
+            # ->
         }
         
         self._validate_tools()
