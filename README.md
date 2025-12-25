@@ -220,13 +220,12 @@ PoisonIvory embodies three core principles:
 | Feature | v1.3.1 (2025) | v1.4.0 (2026) |
 |---|---|---|
 | Security Patterns | Basic SQLi/XSS/CMDi | 150+ AI/Quantum/Container patterns |
-| Threat Detection | Traditional web attacks | LLM injection, AI agent hijacking |
+| Threat Detection | Traditional web attacks | + LLM injection, AI agent hijacking |
 | Risk Assessment | Binary (malicious/clean) | 4-level scoring (CRITICAL→LOW) |
-| Cryptography Focus | TLS/SSL weaknesses | Post-quantum harvesting detection |
-| Container Security | Limited | Escape vectors, K8s API protection |
-| Command Safety | Some shell=True usage | All shell=False, proper sanitization |
-| DNS Protection | Basic | Full rebinding protection |
-| License | ESOL v1.0 only | ESOL v1.0 + GPLv3 |
+| Cryptography Focus | TLS/SSL weaknesses | + Post-quantum harvesting detection |
+| Container Security | Limited | ext. Escape vectors, K8s API protection |
+| Command Safety | Some shell=True usage | + All shell=False, proper sanitization |
+| DNS Protection | Basic | ext. Full rebinding protection |
 
 ### New Threat Categories in 1.4.0
 1. **AI/LLM Security** - Prompt injection, agent manipulation
@@ -268,7 +267,7 @@ Dual Licensed: ESOL v1.0 (Ethical) + GPLv3
 ```
 
 > **PoisonIvory Nuclear Fusion Edition - Version 1.4.0**
-> Codename: "Quantum Nemesis"  
+> Codename: "Nemesis Reborn"  
 > Release Date: December 2024
 > Patterns Version: v.2026
 
