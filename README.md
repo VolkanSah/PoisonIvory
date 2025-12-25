@@ -1,5 +1,5 @@
 # PoisonIvory - Nemesis Nuclear Fusion
-###### > Version 1.4.0 dev - Codename: "Nemesis Reborn" - Security Patterns v.q4-2025
+###### > Version 1.4.0 dev - Codename: "Nemesis Reborn" - Critical vulnerabilities patched + 2026 patterns integrated
 
 ### Advanced Security & Threat Monitoring Framework
 
