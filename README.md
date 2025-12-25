@@ -3,9 +3,8 @@
 ###### > Version 1.4.0 - beta - Codename: "Nemesis Reborn" - Security Patterns v.2026
 > Dual License: ESOL v1.0 + GPLv3
 
-### Advanced Security & Threat Monitoring Framework
+### Advanced Security & Threat Monitoring (mini)Framework
 
-**Enterprise-grade offensive security boilerplate platform by Volkan Sah | Christmas 2024 Release**
 > [!WARNING]
 > Professional Use Only - Handle With Extreme Care!
 > This tool is designed for **experienced security professionals and red teams**. It provides a battle-tested framework for infrastructure hardening, threat detection, and offensive security research.
