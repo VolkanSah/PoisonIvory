@@ -1,5 +1,5 @@
 # PoisonIvory - Nemesis Nuclear Fusion (Reborn)
-###### > Version 1.4.0 - Codename: "Nemesis Reborn" - Security Patterns v.2026
+###### > Version 1.4.0 - beta - Codename: "Nemesis Reborn" - Security Patterns v.2026
 > Dual License: ESOL v1.0 + GPLv3
 
 ### Advanced Security & Threat Monitoring Framework
@@ -13,7 +13,7 @@
 
 ## What is PoisonIvory?
 
-PoisonIvory is an elite security operations platform that combines a range of capabilities to conduct deep security audits and provide continuous threat monitoring within an authorized environment. It is designed to emulate advanced adversarial techniques for defensive learning.
+PoisonIvory is an elite security operations boilerplate that combines a range of capabilities to conduct deep security audits and provide continuous threat monitoring within an authorized environment. It is designed to emulate advanced adversarial techniques for for defensive learning and expansion according to one's own needs.
 
 * **Infrastructure Auditing** - Comprehensive scanning of domains, onion services, and network assets.
 * **AI-Era Threat Detection** - Real-time detection of LLM prompt injection, AI agent hijacking, quantum harvesting attacks.
@@ -23,12 +23,11 @@ PoisonIvory is an elite security operations platform that combines a range of ca
 * **Blue Team Integration** - Framework for continuous monitoring and collection of Threat Intelligence within your own security perimeter.
 
 Built for:
-- Red team operations (authorized environments only).
+- Red/Blue team operations (authorized environments only).
 - Critical infrastructure hardening and compliance checks.
 - Security research and adversary simulation in the AI/Quantum era.
 - Training of elite security professionals.
 
----
 
 ## Key Features
 
@@ -68,11 +67,11 @@ Built for:
 
 ### Security Tools (Partial List)
 ```bash
-# Core dependencies
-sudo apt install nmap nikto sslscan testssl.sh
+# Minimum Core dependencies needed
+nmap nikto sslscan testssl.sh
 
-# Python modules
-pip3 install requests stem scapy ipaddress
+# Minimum Python modules
+requests stem scapy ipaddress needed
 ```
 
 > **Expert Notice**
@@ -83,11 +82,10 @@ pip3 install requests stem scapy ipaddress
 > 3.  Resolve errors through analysis.
 > 4.  Modify configurations for your operational needs.
 
------
 
 ## Configuration
 
-### Example `cms_security_config.json`
+### Minimum Example `cms_security_config.json`
 
 ```json
 {
@@ -113,7 +111,7 @@ pip3 install requests stem scapy ipaddress
 ### Command Structure (Preserved Original Interface)
 
 ```bash
-python3 PoisonIvory.py [COMMAND] <config_file>
+PoisonIvory.py [COMMAND] <config_file>
 ```
 
 ### Operations
@@ -147,13 +145,13 @@ Example warning at startup:
 **Run security audit:**
 
 ```bash
-python3 PoisonIvory.py scan config.json
+PoisonIvory.py scan config.json
 ```
 
 **Start continuous monitoring:**
 
 ```bash
-python3 PoisonIvory.py monitor config.json
+PoisonIvory.py monitor config.json
 ```
 
 -----
@@ -191,7 +189,7 @@ PoisonIvory embodies three core principles:
 
 -----
 
-## What's New in Version 1.4.0 "Quantum Nemesis"?
+## What's New in Version 1.4.0 ?
 
 ### Critical Security Enhancements
 
@@ -214,11 +212,10 @@ PoisonIvory embodies three core principles:
   - **Thread-safe operations** - Locking for concurrent monitoring
   - **IP validation** - Proper `ipaddress` module usage
 
------
 
 ## Changelog (Updates)
 
-### v1.3.1 → v1.4.0 "Quantum Nemesis"
+### v1.3.1 → v1.4.0 
 
 | Feature | v1.3.1 (2025) | v1.4.0 (2026) |
 |---|---|---|
@@ -238,7 +235,6 @@ PoisonIvory embodies three core principles:
 4. **Deepfake & Identity** - Synthetic fraud detection
 5. **Supply Chain 2026** - AI-generated malicious packages
 
------
 
 ## Development & Credits
 
@@ -247,16 +243,13 @@ PoisonIvory embodies three core principles:
   - **Volkan Kücükbudak** ([@volkansah](https://github.com/volkansah)) - Lead Architect
 
 ### AI-Assisted Development 
-  - **DeepSeek** - Help to write this README.md after 5 tries! WTF (was to lazy, sorry)
+  - **DeepSeek** - Help to write this README.md after 5 tries! WTF (DS was to lazy)
   - **Claude 4.5** - Architectural review and pattern validation after 12 tries!.
 
 > This project represents a human-AI collaboration where:
 >
 >   - Human expertise defined operational requirements and security boundaries.
->   - AI contributed critical vulnerability fixes and future threat anticipation.
->   - Joint effort produced tools that understand both current and emerging attack vectors.
 
------
 
 ## Support the Project
 
@@ -280,7 +273,7 @@ Dual Licensed: ESOL v1.0 (Ethical) + GPLv3
 > Patterns Version: v.2026
 
 ---
-
+```
 ###  PoisonIvory Statement: Nemesis Fusion Philosophy
 
 ### I. The Duality of the Blade
@@ -311,4 +304,7 @@ We use anonymity to increase accountability. By rotating identities, Ivory evade
 
 A tool that sees everything must leave no trace that could be weaponized against the innocent. PoisonIvory is gas—filling the void, scanning every corner, and vanishing upon contact, taking its secrets to the grave.
 
+
 > **"In the fusion of offense and defense lies the only true security."**
+
+```
