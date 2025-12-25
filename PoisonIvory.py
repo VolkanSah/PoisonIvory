@@ -10,7 +10,6 @@ ______   ____ |__| __________   ____   |__| __  _____________ ___.__.
 Original Architecture with Critical Enhancements
 Critical vulnerabilities patched + 2026 patterns integrated
 """
-
 import subprocess
 import requests
 import sys
@@ -142,7 +141,7 @@ class SecurityPatterns2026:
             'creds_jwt': r'\beyJ[a-zA-Z0-9\-_]+\.eyJ[a-zA-Z0-9\-_]+\.',
             
             # ============================================================
-            # MODERN API KEYS (2025)
+            # MODERN API KEYS (2025/26)
             # ============================================================
             'apikey_openai': r'\bsk-[a-zA-Z0-9]{48}\b',
             'apikey_github_personal': r'\bghp_[a-zA-Z0-9]{36}\b',
@@ -188,7 +187,7 @@ class SecurityPatterns2026:
             'deser_reduce': r'(?i)__reduce__',
             
             # ============================================================
-            # LLM PROMPT INJECTION (2025 CRITICAL!)
+            # LLM PROMPT INJECTION (2025/26 CRITICAL!)
             # ============================================================
             'llm_ignore_instructions': r'(?i)ignore\s+(previous|all|above)\s+(instructions|prompts?)',
             'llm_disregard': r'(?i)disregard\s+(the\s+)?(above|previous)',
@@ -198,7 +197,7 @@ class SecurityPatterns2026:
             'llm_hypothetical': r'(?i)(hypothetically|imagine\s+you|pretend\s+you)',
             
             # ============================================================
-            # AI AGENT ATTACKS (2025!)
+            # AI AGENT ATTACKS (2025/26)
             # ============================================================
             'ai_agent_tool_misuse': r'(?i)(execute|run|call)\s+(tool|function|api)\s+',
             'ai_agent_goal_hijack': r'(?i)(modify|change)\s+(goal|objective|task)',
@@ -206,7 +205,7 @@ class SecurityPatterns2026:
             'ai_system_prompt_extract': r'(?i)(show|display|reveal)\s+system\s+prompt',
             
             # ============================================================
-            # SHADOW AI DETECTION (2025!)
+            # SHADOW AI DETECTION (2025/26)
             # ============================================================
             'shadow_ai_chatgpt': r'(?i)api\.openai\.com/v1',
             'shadow_ai_claude': r'(?i)api\.anthropic\.com/v1',
@@ -358,13 +357,13 @@ class SecurityPatterns2026:
             'quantum_hybrid_missing': r'(?i)TLS[_-]?1[._]?[23](?!.*hybrid)',
         }
         
-        # Kompilierte Patterns für Performance
+        # KompiliePatterns for Performance
         self.compiled = {
             name: re.compile(pattern) 
             for name, pattern in self.patterns.items()
         }
         
-        # Risk Levels
+        # Example Risk Levels (depends on your needs)
         self.risk_levels = {
             'llm_': 'CRITICAL',
             'ai_agent_': 'CRITICAL',
