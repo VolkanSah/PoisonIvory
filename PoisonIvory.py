@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # source: https://github.com/VolkanSah/PoisonIvory/
 # Dual License Statement: (ESOL v1.0) + (GPLv3)
-# 
-"""
-PoisonIvory 1.4.0 - Nemesis Nuclear Fusion (Reborn)
-Volkan's Original Architecture with Critical Enhancements
+"""              .__                      .__                          
+______   ____ |__| __________   ____   |__| __  _____________ ___.__.
+\____ \ /  _ \|  |/  ___/  _ \ /    \  |  \  \/ /  _ \_  __ <   |  |
+|  |_> >  <_> )  |\___ (  <_> )   |  \ |  |\   (  <_> )  | \/\___  |
+|   __/ \____/|__/____  >____/|___|  / |__| \_/ \____/|__|   / ____|
+|__|  nemesis v.1.4.0  \/           \/   © 2008-2026 Volkan Sah   \/   
+Original Architecture with Critical Enhancements
 Critical vulnerabilities patched + 2026 patterns integrated
 """
 
