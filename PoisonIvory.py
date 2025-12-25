@@ -6,7 +6,7 @@ ______   ____ |__| __________   ____   |__| __  _____________ ___.__.
 \____ \ /  _ \|  |/  ___/  _ \ /    \  |  \  \/ /  _ \_  __ <   |  |
 |  |_> >  <_> )  |\___ (  <_> )   |  \ |  |\   (  <_> )  | \/\___  |
 |   __/ \____/|__/____  >____/|___|  / |__| \_/ \____/|__|   / ____|
-|__|  nemesis v.1.4.0  \/           \/   © 2008-2026 Volkan Sah   \/   
+|__|  nemesis v.1.4.0  \/   REBORN  \/   © 2008-2026 Volkan Sah   \/   
 Original Architecture with Critical Enhancements
 Critical vulnerabilities patched + 2026 patterns integrated
 """
