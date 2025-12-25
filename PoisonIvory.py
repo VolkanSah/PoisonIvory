@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # source: https://github.com/VolkanSah/PoisonIvory/
 # Dual License Statement: (ESOL v1.0) + (GPLv3)
-"""              .__                      .__                          
+"""           .__                      .__                          
 ______   ____ |__| __________   ____   |__| __  _____________ ___.__.
 \____ \ /  _ \|  |/  ___/  _ \ /    \  |  \  \/ /  _ \_  __ <   |  |
 |  |_> >  <_> )  |\___ (  <_> )   |  \ |  |\   (  <_> )  | \/\___  |
