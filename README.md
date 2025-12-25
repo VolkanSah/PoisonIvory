@@ -1,22 +1,22 @@
-# PoisonIvory - Nemesis Nuclear Fusion
-###### > Version 1.4.0 dev - Codename: "Nemesis Reborn" - Critical vulnerabilities patched + 2026 patterns integrated
+# PoisonIvory - Nemesis Nuclear Fusion (Reborn)
+###### > Version 1.4.0 - Codename: "Nemesis Reborn" - Security Patterns v.2026
+> Dual License: ESOL v1.0 + GPLv3
 
 ### Advanced Security & Threat Monitoring Framework
 
-**Enterprise-grade offensive security platform by Volkan Sah**
+**Enterprise-grade offensive security boilerplate platform by Volkan Sah | Christmas 2024 Release**
 > [!WARNING]
 > Professional Use Only - Handle With Extreme Care!
 > This tool is designed for **experienced security professionals and red teams**. It provides a battle-tested framework for infrastructure hardening, threat detection, and offensive security research.
 > **PoisonIvory is not for script kiddies!** It intentionally requires deep technical knowledge to operate effectively. Expect to troubleshoot missing dependencies, analyze raw outputs, and interpret security events.
 
----
 
 ## What is PoisonIvory?
 
 PoisonIvory is an elite security operations platform that combines a range of capabilities to conduct deep security audits and provide continuous threat monitoring within an authorized environment. It is designed to emulate advanced adversarial techniques for defensive learning.
 
 * **Infrastructure Auditing** - Comprehensive scanning of domains, onion services, and network assets.
-* **Threat Detection** - Real-time malicious pattern recognition and payload analysis in network traffic.
+* **AI-Era Threat Detection** - Real-time detection of LLM prompt injection, AI agent hijacking, quantum harvesting attacks.
 * **Vulnerability Assessment** - Integration with industry-standard assessment tools (Nmap, Nuclei, SSLScan, etc.).
 * **Tor Circuit Management** - Active monitoring and defense against malicious Tor relays.
 * **Automated Response** - Threshold-based emergency scanning and detailed forensic reporting.
@@ -25,7 +25,7 @@ PoisonIvory is an elite security operations platform that combines a range of ca
 Built for:
 - Red team operations (authorized environments only).
 - Critical infrastructure hardening and compliance checks.
-- Security research and adversary simulation.
+- Security research and adversary simulation in the AI/Quantum era.
 - Training of elite security professionals.
 
 ---
@@ -36,7 +36,8 @@ Built for:
 - JSON-based configuration system for enterprise deployment.
 - Modular architecture supporting custom security workflows.
 - **Nuclear Fusion Mode** for stress testing infrastructure limits under controlled conditions.
-- Raw socket packet analysis for maximum performance (when available).
+- **SecurityPatterns2026 Class** with 150+ patterns for modern threats.
+- **Risk Scoring System** - Automatic CRITICAL/HIGH/MEDIUM/LOW classification.
 - Preserves original architecture while enhancing security and performance.
 
 ### Security Integrations
@@ -50,7 +51,7 @@ Built for:
 | **OpenVAS** | Support for external, comprehensive vulnerability assessment via API (if configured). |
 
 ### Advanced Operations
-- Suspicious activity pattern matching with advanced, custom regex.
+- **2026 Threat Patterns** - LLM injection, AI agent attacks, quantum harvesting, container escape.
 - Automatic emergency scanning on high-confidence threat detection.
 - Continuous monitoring with periodic health checks and DNS rebinding protection.
 - Comprehensive JSON reporting for forensic analysis.
@@ -61,7 +62,7 @@ Built for:
 ## Requirements
 
 ### Mandatory
-- Python 3.9+
+- Python 3.9+ (3.11+ recommended)
 - Linux environment (Kernel 5.4+ recommended)
 - Root privileges are required for Nuclear Mode kernel-level operations.
 
@@ -71,8 +72,8 @@ Built for:
 sudo apt install nmap nikto sslscan testssl.sh
 
 # Python modules
-pip3 install requests stem scapy
-````
+pip3 install requests stem scapy ipaddress
+```
 
 > **Expert Notice**
 > No automatic dependency checks are included - this is intentional. You are expected to:
@@ -102,8 +103,8 @@ pip3 install requests stem scapy
 }
 ```
 
-> **Configuration Detail: `malicious_patterns`**
-> This critical configuration list defines the **Regular Expressions (Regex)** used by the packet sniffer to instantly identify attack attempts (payloads) in network traffic. These patterns cover advanced vectors such as SQL Injection, XSS, Command Injection, and deserialization attacks, enabling real-time threat intelligence gathering.
+> **Configuration Note: SecurityPatterns2026**
+> The 2026 patterns are **hardcoded** in the `SecurityPatterns2026` class and include AI/LLM threats, quantum attacks, container escape vectors, and modern supply chain attacks. No configuration needed for these advanced patterns.
 
 -----
 
@@ -137,7 +138,7 @@ Example warning at startup:
 ```text
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! NUCLEAR MODE ACTIVATED - EXPECT SYSTEM INSTABILITY !!
-!!     Target servers may experience disruption         !!
+!!    Target servers may experience disruption       !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ```
 
@@ -173,7 +174,7 @@ PoisonIvory embodies three core principles:
       - Critical security fixes integrated without over-engineering.
       - Seamless upgrade path for existing users.
 
-3.  **Offense-Informed**
+3.  **Offense-Informed Defense**
 
       - Adversary-emulating techniques for robust defense development.
       - Threshold-based automatic countermeasures.
@@ -190,48 +191,52 @@ PoisonIvory embodies three core principles:
 
 -----
 
-## What's New in Nuclear Fusion Edition?
+## What's New in Version 1.4.0 "Quantum Nemesis"?
 
-### Critical Fixes
+### Critical Security Enhancements
 
-  - Command injection vulnerabilities patched.
-  - Regex pattern errors corrected.
-  - DNS rebinding protection implemented.
-  - Thread-safe activity logging.
+  - **SecurityPatterns2026 Class** - Complete overhaul with 150+ modern patterns
+  - **AI/LLM Threat Detection** - Prompt injection, agent hijacking, shadow AI
+  - **Quantum-Era Security** - Post-quantum harvesting, weak PQC migration detection
+  - **Container Security** - Escape vectors, Kubernetes API protection
+  - **Risk Scoring System** - Automatic CRITICAL/HIGH/MEDIUM/LOW classification
 
-### Nuclear Mode Features
+### Nuclear Mode Improvements
 
-  - Kernel-level network optimizations.
-  - Aggressive resource allocation.
-  - High-intensity scanning parameters.
-  - Reduced monitoring intervals.
+  - Enhanced kernel-level network optimizations.
+  - Better resource allocation and memory management.
+  - Improved stability with proper error handling.
 
-### Enterprise Enhancements
+### Enterprise Fixes
 
-  - Tor password authentication support.
-  - Secure file permissions (umask 0077) for all output files.
-  - Anti-loop mechanisms for Tor circuit renewal stability.
-  - Improved error handling and resilience.
+  - **Command injection vulnerabilities** - All `shell=True` removed
+  - **DNS rebinding protection** - Full SSRF mitigation implemented
+  - **Thread-safe operations** - Locking for concurrent monitoring
+  - **IP validation** - Proper `ipaddress` module usage
 
 -----
 
-## Changelog
+## Changelog (Updates)
 
-### v1.0 → v1.3 Nuclear Fusion
+### v1.3.1 → v1.4.0 "Quantum Nemesis"
 
-| Feature | Nemesis (v1.0) | Nuclear Fusion (v1.3) |
+| Feature | v1.3.1 (2025) | v1.4.0 (2026) |
 |---|---|---|
-| Architecture | Original CMS-focused | Enhanced threat monitoring |
-| Security | Basic patterns | Hardened command execution |
-| Performance | Standard scanning | Nuclear mode optimization |
-| Tor Management | Basic circuit control | Password auth + anti-loop |
-| Resource Handling | No limits | Controlled resource allocation |
-| File Safety | Standard permissions | Strict umask (0077) |
-| CLI Interface | Original structure | Preserved + nuclear warnings |
+| Security Patterns | Basic SQLi/XSS/CMDi | 150+ AI/Quantum/Container patterns |
+| Threat Detection | Traditional web attacks | LLM injection, AI agent hijacking |
+| Risk Assessment | Binary (malicious/clean) | 4-level scoring (CRITICAL→LOW) |
+| Cryptography Focus | TLS/SSL weaknesses | Post-quantum harvesting detection |
+| Container Security | Limited | Escape vectors, K8s API protection |
+| Command Safety | Some shell=True usage | All shell=False, proper sanitization |
+| DNS Protection | Basic | Full rebinding protection |
+| License | ESOL v1.0 only | ESOL v1.0 + GPLv3 |
 
-### v1.3.1
-
-  - Updated Security Patterns to v.q3-2025.
+### New Threat Categories in 1.4.0
+1. **AI/LLM Security** - Prompt injection, agent manipulation
+2. **Quantum Cryptography** - Harvesting attacks, migration gaps
+3. **Container & Cloud Native** - Escape vectors, K8s security
+4. **Deepfake & Identity** - Synthetic fraud detection
+5. **Supply Chain 2026** - AI-generated malicious packages
 
 -----
 
@@ -241,16 +246,15 @@ PoisonIvory embodies three core principles:
 
   - **Volkan Kücükbudak** ([@volkansah](https://github.com/volkansah)) - Lead Architect
 
-### AI-Assisted Development
-
-  - **DeepSeek-R1** - Tips for security hardening and nuclear mode ideation.
-  - **OpenAI GPT-4o** - Architectural consultation and documentation support.
+### AI-Assisted Development 
+  - **DeepSeek** - Help to write this README.md after 5 tries! WTF (was to lazy, sorry)
+  - **Claude 4.5** - Architectural review and pattern validation after 12 tries!.
 
 > This project represents a human-AI collaboration where:
 >
 >   - Human expertise defined operational requirements and security boundaries.
->   - AI contributed critical vulnerability fixes and performance optimizations.
->   - Joint effort produced the Nuclear Fusion Edition without compromising original design intent.
+>   - AI contributed critical vulnerability fixes and future threat anticipation.
+>   - Joint effort produced tools that understand both current and emerging attack vectors.
 
 -----
 
@@ -266,13 +270,14 @@ If you value this work:
 <!-- end list -->
 
 ```text
-Copyright © 2008-2025 Volkan Kücükbudak
-Licensed under the Ethical Security Operations License (ESOL v1.0)
+Copyright © 2008-2026 Volkan Kücükbudak
+Dual Licensed: ESOL v1.0 (Ethical) + GPLv3
 ```
 
-> **PoisonIvory Nuclear Fusion Edition**
-> Version 1.3.1 - Codename: "Nemesis Reborn"
-> Release Date: July 2025
+> **PoisonIvory Nuclear Fusion Edition - Version 1.4.0**
+> Codename: "Quantum Nemesis"  
+> Release Date: December 2024
+> Patterns Version: v.2026
 
 ---
 
@@ -280,11 +285,11 @@ Licensed under the Ethical Security Operations License (ESOL v1.0)
 
 ### I. The Duality of the Blade
 
-PoisonIvory is neither shield nor sword alone — it is tempered steel. In today’s cybersphere, the divide between defense (Blue) and offense (Red/Black) is shaped by context, not by tools. Ivory exists in the grey zone: defending the weak and exposing the reckless.
+PoisonIvory is neither shield nor sword alone — it is tempered steel. In today's cybersphere, the divide between defense (Blue) and offense (Red/Black) is shaped by context, not by tools. Ivory exists in the grey zone: defending the weak and exposing the reckless.
 
 ### II. Camouflage Through Integrity
 
-Truly powerful tools don’t need loud names. PoisonIvory hides as what systems crave most: a vigilant monitor. This mimicry isn’t for malice — it demonstrates that trust in digital infrastructure must be earned through verification, not granted by a harmless process name.
+Truly powerful tools don't need loud names. PoisonIvory hides as what systems crave most: a vigilant monitor. This mimicry isn't for malice — it demonstrates that trust in digital infrastructure must be earned through verification, not granted by a harmless process name.
 
 ### III. The Nuclear Option: Controlled Escalation
 
@@ -306,6 +311,4 @@ We use anonymity to increase accountability. By rotating identities, Ivory evade
 
 A tool that sees everything must leave no trace that could be weaponized against the innocent. PoisonIvory is gas—filling the void, scanning every corner, and vanishing upon contact, taking its secrets to the grave.
 
-> **“In the fusion of offense and defense lies the only true security.”**
-
-
+> **"In the fusion of offense and defense lies the only true security."**
