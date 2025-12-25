@@ -3,17 +3,17 @@
 ###### > Version 1.4.0 - beta - Codename: "Nemesis Reborn" - Security Patterns v.2026
 > Dual License: ESOL v1.0 + GPLv3
 
-### Advanced Security & Threat Monitoring (mini)Framework
+### Advanced Security & Threat Monitoring (DIY)
 
 > [!WARNING]
 > Professional Use Only - Handle With Extreme Care!
-> This tool is designed for **experienced security professionals and red teams**. It provides a battle-tested framework for infrastructure hardening, threat detection, and offensive security research.
+> This tool is designed for **experienced security professionals and red/blue teams**. It provides a battle-tested (mini)framework for infrastructure hardening, threat detection, and offensive security research.
 > **PoisonIvory is not for script kiddies!** It intentionally requires deep technical knowledge to operate effectively. Expect to troubleshoot missing dependencies, analyze raw outputs, and interpret security events.
 
 
 ## What is PoisonIvory?
 
-PoisonIvory is an elite security operations boilerplate that combines a range of capabilities to conduct deep security audits and provide continuous threat monitoring within an authorized environment. It is designed to emulate advanced adversarial techniques for for defensive learning and expansion according to one's own needs.
+PoisonIvory is an elite security operations (micro) framework/boilerplate that combines a range of capabilities to conduct deep security audits and provide continuous threat monitoring within an authorized environment. It is designed to emulate advanced adversarial techniques for for defensive learning and expansion according to ypur own needs.
 
 * **Infrastructure Auditing** - Comprehensive scanning of domains, onion services, and network assets.
 * **AI-Era Threat Detection** - Real-time detection of LLM prompt injection, AI agent hijacking, quantum harvesting attacks.
@@ -70,8 +70,8 @@ Built for:
 # Minimum Core dependencies needed
 nmap nikto sslscan testssl.sh
 
-# Minimum Python modules
-requests stem scapy ipaddress needed
+# Minimum Python modules needed
+requests stem scapy ipaddress 
 ```
 
 > **Expert Notice**
@@ -268,7 +268,7 @@ Dual Licensed: ESOL v1.0 (Ethical) + GPLv3
 
 > **PoisonIvory Nuclear Fusion Edition - Version 1.4.0**
 > Codename: "Nemesis Reborn"  
-> Release Date: December 2024
+> Release Date: December 25.12.2025
 > Patterns Version: v.2026
 
 ---
