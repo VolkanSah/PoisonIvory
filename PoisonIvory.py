@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+# source: https://github.com/VolkanSah/PoisonIvory/
+# Dual License Statement: (ESOL v1.0) + (GPLv3)
+# 
 """
-PoisonIvory 1.4.0 - Security Fixed Edition
+PoisonIvory 1.4.0 - Nemesis Nuclear Fusion (Reborn)
+Volkan's Original Architecture with Critical Enhancements
 Critical vulnerabilities patched + 2026 patterns integrated
-COMPLETE with all original features
 """
 
 import subprocess
@@ -13,7 +16,6 @@ import time
 import threading
 import signal
 import os
-import shlex
 import random
 import resource
 import socket
@@ -26,7 +28,7 @@ from typing import Dict, List, Optional, Tuple
 
 # Scapy für Packet Sniffing
 try:
-    from scapy.all import *
+    from scapy.all import sniff, IP, TCP, Raw
     SCAPY_AVAILABLE = True
 except ImportError:
     SCAPY_AVAILABLE = False
@@ -46,7 +48,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('cms_security_monitor.log'),
+        logging.FileHandler('poison_ivory_core.log'),
         logging.StreamHandler()
     ]
 )
@@ -418,6 +420,19 @@ class SecurityPatterns2026:
                                default='NONE',
                                key=lambda x: ['LOW','MEDIUM','HIGH','CRITICAL'].index(x))
         }
+    
+    def scan_text(self, text: str) -> List[Dict]:
+        """Lightweight scan that returns just findings list"""
+        findings = []
+        for name, regex in self.compiled.items():
+            if match := regex.search(text):
+                findings.append({
+                    'pattern': name,
+                    'risk': self.get_risk_level(name),
+                    'match': match.group(),
+                    'position': match.span()
+                })
+        return findings
 
 
 class CMSSecurityMonitor:
@@ -477,9 +492,10 @@ class CMSSecurityMonitor:
         try:
             resolved_ip = socket.gethostbyname(hostname)
             
-            # Check if private IP
-            if self.is_private_ip(resolved_ip):
-                logger.warning(f"Private IP resolved for {hostname}: {resolved_ip}")
+            # Check if private IP using ipaddress module
+            ip_obj = ipaddress.ip_address(resolved_ip)
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                logger.critical(f"SSRF/REBINDING DETECTED: {hostname} points to {resolved_ip}")
                 return None
             
             # Cache result
@@ -488,6 +504,9 @@ class CMSSecurityMonitor:
             
         except socket.gaierror as e:
             logger.error(f"DNS resolution failed for {hostname}: {e}")
+            return None
+        except ValueError:
+            logger.error(f"Invalid IP address resolved for {hostname}")
             return None
     
     def check_onion_reachable(self, target):
@@ -613,14 +632,22 @@ class CMSSecurityMonitor:
 
     def enable_nuclear_mode(self):
         """Aktiviert Nuclear-Modus für maximale Leistung"""
-        logger.warning("NUCLEAR MODE ACTIVATED - EXPECT SYSTEM INSTABILITY")
+        logger.warning("!!! NUCLEAR MODE ACTIVE: APPLYING KERNEL TUNING !!!")
         
         if os.geteuid() == 0:
             try:
                 subprocess.run(['sysctl', '-w', 'net.core.rmem_max=268435456'], 
-                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            except Exception:
-                logger.warning("Nuclear: Kernel tuning requires root privileges")
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+                subprocess.run(['sysctl', '-w', 'net.ipv4.tcp_max_syn_backlog=4096'],
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+            except Exception as e:
+                logger.warning(f"Nuclear: Kernel tuning failed: {e}")
+        
+        # Remove soft limits for memory allocation
+        try:
+            resource.setrlimit(resource.RLIMIT_AS, (resource.RLIM_INFINITY, resource.RLIM_INFINITY))
+        except Exception as e:
+            logger.warning(f"Nuclear: Memory limit removal failed: {e}")
 
     def shutdown_handler(self, signum, frame):
         """Graceful shutdown mit Nuclear-Cleanup"""
@@ -671,7 +698,7 @@ class CMSSecurityMonitor:
         port_results = {}
         nmap_flags = "-T5 --min-rate 5000" if self.nuclear_mode else "-T4"
         
-        cmd = ["nmap"] + nmap_flags.split() + ["-sS", "-p-", target]
+        cmd = ["nmap"] + nmap_flags.split() + ["-sS", "-sV", "-p-", target]
         result = self.run_command(cmd, timeout=900 if self.nuclear_mode else 300)
         
         if result['success']:
@@ -690,13 +717,14 @@ class CMSSecurityMonitor:
             logger.warning("Nmap-Ausgabe ist leer oder der Scan ist fehlgeschlagen.")
             return []
         
-        pattern = re.compile(r"(\d+)/(\w+)\s+open\s+([\w-]+)")
+        # Pattern: 80/tcp open http oder 80/udp open dns
+        pattern = re.compile(r'(\d+)/(tcp|udp)\s+open\s+([\w-]+)')
         
         for line in nmap_output.split('\n'):
             match = pattern.search(line)
             if match:
                 open_ports.append({
-                    'portid': match.group(1),
+                    'port': int(match.group(1)),
                     'protocol': match.group(2),
                     'service': match.group(3)
                 })
@@ -769,9 +797,9 @@ class CMSSecurityMonitor:
         
         vuln_results = {}
         
-        # Nuclei
+        # Nuclei mit critical,high severity
         nuclei_output = f"{self.output_dir}/nuclei_{target}_{int(time.time())}.txt"
-        cmd = ["nuclei", "-u", f"http://{target}", "-o", nuclei_output, "-severity", "high,critical"]
+        cmd = ["nuclei", "-u", f"http://{target}", "-o", nuclei_output, "-severity", "critical,high"]
         result = self.run_command(cmd, timeout=900)
         if result['success']:
             vuln_results['nuclei'] = {
@@ -855,11 +883,13 @@ class CMSSecurityMonitor:
                 payload = packet[Raw].load.decode('utf-8', errors='ignore')
                 source_ip = packet[IP].src if packet.haslayer(IP) else "unknown"
                 
-                # NOW WORKS: Malicious patterns prüfen
-                is_malicious, pattern = self.check_malicious_traffic(payload)
+                # Use scan_text for lightweight detection
+                findings = self.security_patterns.scan_text(payload)
                 
-                if is_malicious:
-                    self.log_suspicious_activity(source_ip, pattern, payload)
+                if findings:
+                    for finding in findings:
+                        pattern_info = f"{finding['pattern']} ({finding['risk']})"
+                        self.log_suspicious_activity(source_ip, pattern_info, payload)
                     
             except Exception as e:
                 logger.debug(f"Packet processing error: {e}")
@@ -879,6 +909,8 @@ class CMSSecurityMonitor:
                 store=0,
                 stop_filter=lambda p: not self.monitoring_active
             )
+        except PermissionError:
+            logger.error("Traffic monitoring requires root/sudo privileges")
         except Exception as e:
             logger.error(f"Traffic monitoring error: {e}")
 
