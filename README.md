@@ -1,6 +1,7 @@
 # PoisonIvory - Nemesis//NF
 
 ###### > Version 1.4.0 - beta - Codename: "Nemesis Reborn" - Security Patterns v.2026
+![PoisonIvory](ivory.jpg)
 > Dual License: ESOL v1.0 + GPLv3
 
 ### Advanced Security & Threat Monitoring (DIY)
