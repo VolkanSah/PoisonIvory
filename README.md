@@ -273,7 +273,7 @@ Dual Licensed: ESOL v1.0 (Ethical) + GPLv3
 > Patterns Version: v.2026
 
 ---
-```
+
 ###  PoisonIvory Statement: Nemesis Fusion Philosophy
 
 ### I. The Duality of the Blade
@@ -307,4 +307,3 @@ A tool that sees everything must leave no trace that could be weaponized against
 
 > **"In the fusion of offense and defense lies the only true security."**
 
-```
